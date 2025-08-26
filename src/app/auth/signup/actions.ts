@@ -1,4 +1,3 @@
-// /app/(...)/actions.ts
 'use server';
 
 import { createUser } from '@/server/services/userService';
@@ -19,7 +18,6 @@ export async function signupAction(formData: FormData): Promise<SignupActionResu
 
     const res = await createUser(raw);
     if (!res.ok) {
-        console.log(11);
         console.log(res.error);
 
         return { ok: false, error: res.error };

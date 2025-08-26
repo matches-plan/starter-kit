@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { Label } from '@radix-ui/react-label';
 import { SignupActionResult } from '@/app/auth/signup/actions';
+import { Label } from '@/components/ui/label';
 
 type Props = React.ComponentProps<'div'> & {
     action: (formData: FormData) => Promise<SignupActionResult>;
