@@ -1,7 +1,7 @@
 // src/auth.ts
 import NextAuth, { CredentialsSignin } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import Kakao from 'next-auth/providers/kakao';
+import KakaoProvider from 'next-auth/providers/kakao';
 import { z } from 'zod';
 // import { prisma } from '@/lib/prisma';
 // import bcrypt from 'bcrypt';
@@ -47,12 +47,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 }
             },
         }),
-        Kakao({
+        KakaoProvider({
             clientId: process.env.KAKAO_CLIENT_ID!,
             clientSecret: process.env.KAKAO_CLIENT_SECRET!,
-            authorization: {
-                params: { scope: 'profile_nickname profile_image account_email' },
-            },
         }),
     ],
     pages: { signIn: '/auth/login', error: '/auth/login' },
@@ -72,27 +69,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }
             return session;
         },
-        async signIn({ user, account, profile }) {
-            if (account?.provider === 'kakao') {
-                // 카카오 로그인 시 추가적인 처리
-            }
-            return true;
-        },
-        async redirect({ url, baseUrl }) {
-            console.log(url, baseUrl);
-            console.log(123131231321);
-            // Allows relative callback URLs
-            if (url.startsWith('/')) return `${baseUrl}${url}`;
-
-            // Allows callback URLs on the same origin
-            if (new URL(url).origin === baseUrl) return url;
-
-            return baseUrl;
-        },
     },
 
     session: {
         strategy: 'jwt',
-        maxAge: 30,
+        maxAge: 30 * 24 * 60 * 60, // 30일
     },
 });

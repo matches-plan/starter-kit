@@ -1,23 +1,13 @@
-// /src/components/auth/LoginForm.tsx
-'use client';
-
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { useSearchParams } from 'next/navigation'; // (선택) next 파라미터 복귀용
-import { signIn } from 'next-auth/react';
+import { emailLogin, kakaoLogin } from '@/app/auth/login/actions';
 
-type Props = React.ComponentProps<'div'> & {
-    action: (formData: FormData) => void | Promise<void>;
-};
+type Props = React.ComponentProps<'div'> & {};
 
-export function LoginForm({ className, action, ...props }: Props) {
-    const search = useSearchParams();
-    // const next = search?.get('next') ?? '/dashboard'; // 로그인 후 돌아갈 경로
-    // const [kakaoLoading, setKakaoLoading] = useState(false);
-
+export function LoginForm({ className, ...props }: Props) {
     return (
         <div
             className={cn('flex flex-col gap-6', className)}
@@ -28,7 +18,7 @@ export function LoginForm({ className, action, ...props }: Props) {
                     <CardTitle className="text-xl">환영합니다</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form action={action}>
+                    <form action={emailLogin}>
                         <div className="grid gap-6">
                             <div className="grid gap-6">
                                 <div className="grid gap-3">
@@ -78,7 +68,7 @@ export function LoginForm({ className, action, ...props }: Props) {
                                     type="button"
                                     variant="outline"
                                     className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
-                                    onClick={() => signIn('kakao', { redirect: true, redirectTo: '/api/auth/callback/kakao' })}
+                                    onClick={kakaoLogin}
                                 >
                                     {/* 심플 아이콘 */}
                                     <svg

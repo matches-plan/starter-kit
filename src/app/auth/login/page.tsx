@@ -1,6 +1,5 @@
 // /app/auth/login/page.tsx
-import { LoginForm } from '@/components/auth/LoginForm';
-import { loginAction } from './actions';
+import { LoginForm } from '@/app/auth/login/LoginForm';
 import { GalleryVerticalEnd } from 'lucide-react';
 
 const MAP: Record<string, string> = {
@@ -42,7 +41,7 @@ export default async function LoginPage({
                     </div>
                 )}
 
-                <LoginForm action={loginAction}/>
+                <LoginForm/>
             </div>
         </div>
     );
