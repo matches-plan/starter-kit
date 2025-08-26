@@ -27,7 +27,7 @@ export async function kakaoLogin() {
     try {
         await signIn('kakao', {
             redirect: true,
-            redirectTo: '/dashboard',
+            redirectTo: "/auth/continue?provider=kakao",
         });
     } catch (e) {
         if (e instanceof AuthError) {
