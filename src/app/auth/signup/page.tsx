@@ -1,5 +1,6 @@
 import { SignupForm } from '@/components/auth/SignupForm';
 import { GalleryVerticalEnd } from 'lucide-react';
+import { signupAction } from './actions';
 
 export default function SignupPage() {
     return (
@@ -14,7 +15,7 @@ export default function SignupPage() {
                     </div>
                     Acme Inc.
                 </a>
-                <SignupForm />
+                <SignupForm action={signupAction}/>
             </div>
         </div>
     );

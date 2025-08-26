@@ -42,7 +42,7 @@ export default async function LoginPage({
                     </div>
                 )}
 
-                <LoginForm action={loginAction} />
+                <LoginForm action={loginAction}/>
             </div>
         </div>
     );

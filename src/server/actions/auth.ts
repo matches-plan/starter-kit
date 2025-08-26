@@ -1,4 +1,5 @@
 'use server';
+
 import { auth, signIn, signOut } from '@/auth';
 
 export const signInWithCredentials = async (formData: FormData) => {
