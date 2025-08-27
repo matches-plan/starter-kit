@@ -18,8 +18,6 @@ export async function signupAction(formData: FormData): Promise<SignupActionResu
 
     const res = await createUser(raw);
     if (!res.ok) {
-        console.log(res.error);
-
         return { ok: false, error: res.error };
     }
 
