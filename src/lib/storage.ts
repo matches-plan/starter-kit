@@ -1,3 +1,5 @@
+import 'server-only';
+
 import {
     S3Client,
     HeadObjectCommand,
@@ -7,10 +9,10 @@ import {
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
-const ENDPOINT = process.env.ENDPOINT;
-const ACCESS_KEY_ID = process.env.ACCESS_KEY_ID;
-const SECRET_ACCESS_KEY = process.env.SECRET_ACCESS_KEY;
-const BUCKET = process.env.BUCKET;
+const ENDPOINT = process.env.STORAGE_ENDPOINT;
+const ACCESS_KEY_ID = process.env.STORAGE_ACCESS_KEY_ID;
+const SECRET_ACCESS_KEY = process.env.STORAGE_SECRET_ACCESS_KEY;
+const BUCKET = process.env.STORAGE_BUCKET;
 
 const S3 = new S3Client({
     region: 'auto',
@@ -56,7 +58,26 @@ async function getPresignedUrl(objectKey: string) {
             Key: objectKey,
         }),
     );
+    console.log(url);
+
     return url;
 }
 
-export { headObject, listObjects, getPresignedUrl };
+async function putPresignedUrl(objectKey: string, contentType: string) {
+    console.log(BUCKET);
+
+    const url = await getSignedUrl(
+        S3,
+        new PutObjectCommand({
+            Bucket: BUCKET,
+            Key: objectKey,
+            ContentType: contentType,
+        }),
+    );
+
+    console.log(url);
+
+    return url;
+}
+
+export { headObject, listObjects, getPresignedUrl, putPresignedUrl };
