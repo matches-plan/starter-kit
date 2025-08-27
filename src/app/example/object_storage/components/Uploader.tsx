@@ -1,28 +1,30 @@
 'use client';
 
+import { uploadFile } from '@/components/api/storage';
 import { Input } from '@/components/ui/input';
+import { useRef } from 'react';
 
-export default function Uploader({ objectPath }: { objectPath: string }) {
+export default function Uploader({
+    objectPath,
+    reloadData,
+}: {
+    objectPath: string;
+    reloadData: () => Promise<void>;
+}) {
+    const inputRef = useRef<HTMLInputElement>(null);
     async function onChange(e: React.ChangeEvent<HTMLInputElement>) {
         const file = e.target.files?.[0];
-        const objectKey = `${objectPath}${file?.name}`;
+        const ext = file?.name.split('.').pop();
+        const objectKey = `${objectPath}${Date.now()}.${ext}`;
         if (file) {
-            const response = await fetch('/api/storage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ objectKey, contentType: file.type }),
-            });
-            const { url } = await response.json();
-            // Upload the file to the presigned URL
-            await fetch(url, {
-                method: 'PUT',
-                headers: { 'Content-Type': file.type },
-                body: file,
-            });
+            await uploadFile(file, objectKey);
+            inputRef.current!.value = '';
+            await reloadData();
         }
     }
     return (
         <Input
+            ref={inputRef}
             id="picture"
             type="file"
             className="md:w-fit w-full"

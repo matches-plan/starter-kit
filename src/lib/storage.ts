@@ -6,6 +6,8 @@ import {
     ListObjectsV2Command,
     PutObjectCommand,
     GetObjectCommand,
+    DeleteObjectCommand,
+    DeleteObjectsCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
@@ -50,6 +52,35 @@ async function listObjects({ MaxKeys, Prefix }: { MaxKeys?: number; Prefix?: str
     return data;
 }
 
+async function downloadObject(objectKey: string) {
+    return await S3.send(
+        new GetObjectCommand({
+            Bucket: BUCKET,
+            Key: objectKey,
+        }),
+    );
+}
+
+async function deleteObject(objectKey: string) {
+    await S3.send(
+        new DeleteObjectCommand({
+            Bucket: BUCKET,
+            Key: objectKey,
+        }),
+    );
+}
+
+async function deleteObjects(objectKeys: string[]) {
+    await S3.send(
+        new DeleteObjectsCommand({
+            Bucket: BUCKET,
+            Delete: {
+                Objects: objectKeys.map(key => ({ Key: key })),
+            },
+        }),
+    );
+}
+
 async function getPresignedUrl(objectKey: string) {
     const url = await getSignedUrl(
         S3,
@@ -58,7 +89,6 @@ async function getPresignedUrl(objectKey: string) {
             Key: objectKey,
         }),
     );
-    console.log(url);
 
     return url;
 }
@@ -75,9 +105,15 @@ async function putPresignedUrl(objectKey: string, contentType: string) {
         }),
     );
 
-    console.log(url);
-
     return url;
 }
 
-export { headObject, listObjects, getPresignedUrl, putPresignedUrl };
+export {
+    headObject,
+    listObjects,
+    getPresignedUrl,
+    putPresignedUrl,
+    downloadObject,
+    deleteObject,
+    deleteObjects,
+};
