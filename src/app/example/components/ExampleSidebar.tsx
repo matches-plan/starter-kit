@@ -17,7 +17,7 @@ const data = {
             title: 'Object Storage',
             url: '#',
             icon: IconFolder,
-            pathname: '/example',
+            pathname: '/example/object_storage',
         },
     ],
 };
