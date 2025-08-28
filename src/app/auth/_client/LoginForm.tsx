@@ -1,13 +1,43 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { emailLogin, kakaoLogin } from '@/app/auth/login/actions';
+import { useForm } from 'react-hook-form';
+import type { LoginInput } from '@/lib/validation/login';
+import { loginActionRHF } from '../_actions/login';
 
-type Props = React.ComponentProps<'div'> & {};
+type Props = React.ComponentProps<'div'> & {
+    redirectTo?: string;
+};
 
-export function LoginForm({ className, ...props }: Props) {
+export function LoginForm({ redirectTo, className, ...props }: Props) {
+    const {
+        register,
+        handleSubmit,
+        setError,
+        formState: { errors, isSubmitting },
+    } = useForm<LoginInput>({
+        defaultValues: {
+            email: '',
+            password: '',
+            redirectTo,
+        },
+        mode: 'onSubmit',
+    });
+
+    const onSubmit = async (values: LoginInput) => {
+        const res = await loginActionRHF(values);
+        if (res?.fieldErrors) {
+            Object.entries(res.fieldErrors).forEach(([name, message]) => {
+                setError(name as keyof LoginInput, { type: 'server', message });
+            });
+            return;
+        }
+    };
+
     return (
         <div
             className={cn('flex flex-col gap-6', className)}
@@ -18,7 +48,7 @@ export function LoginForm({ className, ...props }: Props) {
                     <CardTitle className="text-xl">환영합니다</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <form action={emailLogin}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="grid gap-6">
                             <div className="grid gap-6">
                                 <div className="grid gap-3">
@@ -26,10 +56,21 @@ export function LoginForm({ className, ...props }: Props) {
                                     <Input
                                         id="email"
                                         type="email"
-                                        name="email"
-                                        placeholder="m@example.com"
+                                        placeholder="example@email.com"
                                         required
+                                        {...register('email', {
+                                            required: '이메일을 입력해주세요.',
+                                            pattern: {
+                                                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                                message: '이메일 형식이 올바르지 않습니다.',
+                                            },
+                                        })}
                                     />
+                                    {errors.email && (
+                                        <p className="text-xs text-destructive">
+                                            {errors.email.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <div className="grid gap-3">
@@ -44,15 +85,23 @@ export function LoginForm({ className, ...props }: Props) {
                                     </div>
                                     <Input
                                         id="password"
-                                        name="password"
                                         type="password"
                                         required
+                                        {...register('password', {
+                                            required: '비밀번호가 올바르지 않습니다.',
+                                        })}
                                     />
+                                    {errors.password && (
+                                        <p className="text-xs text-destructive mt-1">
+                                            {errors.password.message}
+                                        </p>
+                                    )}
                                 </div>
 
                                 <Button
                                     type="submit"
                                     className="w-full"
+                                    disabled={isSubmitting}
                                 >
                                     Login
                                 </Button>
@@ -63,14 +112,10 @@ export function LoginForm({ className, ...props }: Props) {
                                     </span>
                                 </div>
 
-                                {/* ✅ Kakao 로그인 버튼 */}
-                                <Button
-                                    type="button"
-                                    variant="outline"
+                                <a
+                                    href={`/api/kakao/login?redirect=${redirectTo}`}
                                     className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
-                                    onClick={kakaoLogin}
                                 >
-                                    {/* 심플 아이콘 */}
                                     <svg
                                         width="18"
                                         height="18"
@@ -84,10 +129,15 @@ export function LoginForm({ className, ...props }: Props) {
                                             r="10"
                                         />
                                     </svg>
-                                    {/* {kakaoLoading ? 'Redirecting…' : '카카오로 로그인'} */}
-                                </Button>
+                                </a>
                             </div>
                         </div>
+
+                        <input
+                            type="hidden"
+                            value={redirectTo ?? '/dashboard'}
+                            {...register('redirectTo')}
+                        />
                     </form>
                 </CardContent>
             </Card>

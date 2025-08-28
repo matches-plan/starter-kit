@@ -1,15 +1,22 @@
-'use client';
-import { useSession } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { signoutAction } from '../auth/_actions/signout';
 
 export default function DashboardPage() {
-    console.log(123123);
-    
-    const { data: session } = useSession();
-
-    console.log(session, 1);
     return (
-        <>
-            <h1>대시보드</h1>
-        </>
+        <Card>
+            <CardHeader>
+                <CardTitle>대시보드</CardTitle>
+            </CardHeader>
+
+            <CardContent>
+                <form action={async () => {
+                    "use server"
+                    await signoutAction()
+                }}>
+                    <Button type="submit">로그아웃</Button>
+                </form>
+            </CardContent>
+        </Card>
     );
 }

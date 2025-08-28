@@ -1,10 +1,10 @@
-import { SignupForm } from '@/app/auth/signup/SignupForm';
 import { GalleryVerticalEnd } from 'lucide-react';
-import { signupAction } from './actions';
+import SignupForm from '../_client/SignupForm';
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function SignupPage() {
     return (
-        <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 gap-2">
             <div className="flex w-full max-w-sm flex-col gap-6">
                 <a
                     href="#"
@@ -15,8 +15,12 @@ export default function SignupPage() {
                     </div>
                     Acme Inc.
                 </a>
-                <SignupForm action={signupAction}/>
             </div>
+            <Card>
+                <CardContent>
+                    <SignupForm />
+                </CardContent>
+            </Card>
         </div>
     );
 }

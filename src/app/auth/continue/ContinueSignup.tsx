@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { ArrowLeft, UserCheck } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import SignupForm from './_client/SignupForm';
+import SignupForm from '../_client/SignupForm';
 
-export default function SignupPage({ provider }: { provider?: string }) {
+export default function SignupPage({ snsEmail }: { snsEmail?: string }) {
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-6">
@@ -35,7 +35,7 @@ export default function SignupPage({ provider }: { provider?: string }) {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <SignupForm provider={provider} />
+                        <SignupForm snsEmail={snsEmail} />
                     </CardContent>
                 </Card>
 

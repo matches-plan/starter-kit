@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { User, UserPlus } from 'lucide-react';
-import SignupPage from './SignupPage';
-
-type PageType = 'continue' | 'signup';
+import ContinueSignup from './ContinueSignup';
+import { cookies } from 'next/headers';
+import ContinueLogin from './ContinueLogin';
 
 export default async function Page({
     searchParams,
@@ -13,11 +13,24 @@ export default async function Page({
 }) {
     const [resolvedParams] = await Promise.all([searchParams]);
 
-    const provider = (resolvedParams?.provider ?? 'SNS').toLowerCase();
-    const step = (resolvedParams?.step === 'signup' ? 'signup' : 'continue') as PageType;
+    const step =
+        resolvedParams?.step === 'login'
+            ? 'login'
+            : resolvedParams?.step === 'signup'
+            ? 'signup'
+            : 'continue';
+
+    const cookieStore = await cookies();
+    const cookie = cookieStore.get('pending_oauth')?.value;
+
+    const { email } = cookie ? JSON.parse(cookie) : {};
+
+    if (step === 'login') {
+        return <ContinueLogin />;
+    }
 
     if (step === 'signup') {
-        return <SignupPage provider={provider} />;
+        return <ContinueSignup snsEmail={email} />;
     }
 
     return (
@@ -44,12 +57,18 @@ export default async function Page({
                             </div>
                         </CardHeader>
                         <CardContent className="pt-0">
-                            <Button
+                            <Link
+                                href={`?step=login`}
                                 className="w-full"
-                                size="lg"
                             >
-                                기존 계정으로 연결하기
-                            </Button>
+                                <Button
+                                    variant="secondary"
+                                    className="w-full"
+                                    size="lg"
+                                >
+                                    기존 계정으로 연결하기
+                                </Button>
+                            </Link>
                         </CardContent>
                     </Card>
 
@@ -69,7 +88,7 @@ export default async function Page({
                         </CardHeader>
                         <CardContent className="pt-0">
                             <Link
-                                href={`?step=signup&provider=${encodeURIComponent(provider)}`}
+                                href={`?step=signup`}
                                 className="block"
                             >
                                 <Button

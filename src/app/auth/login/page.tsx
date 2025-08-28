@@ -1,5 +1,4 @@
-// /app/auth/login/page.tsx
-import { LoginForm } from '@/app/auth/login/LoginForm';
+import { LoginForm } from '@/app/auth/_client/LoginForm';
 import { GalleryVerticalEnd } from 'lucide-react';
 
 const MAP: Record<string, string> = {
@@ -12,9 +11,10 @@ const MAP: Record<string, string> = {
 export default async function LoginPage({
     searchParams,
 }: {
-    searchParams: Promise<{ error?: string; code?: string }>;
+    searchParams: Promise<{ error?: string; code?: string; redirect?: string }>;
 }) {
     const sp = await searchParams;
+    const redirectTo = sp.redirect ?? '';
 
     const message = sp.code
         ? MAP[sp.code] ?? sp.code
@@ -41,7 +41,7 @@ export default async function LoginPage({
                     </div>
                 )}
 
-                <LoginForm/>
+                <LoginForm redirectTo={redirectTo} />
             </div>
         </div>
     );

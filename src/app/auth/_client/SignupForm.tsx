@@ -9,9 +9,9 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp
 import { Mail, Phone, ShieldCheck, Key, MinusIcon } from 'lucide-react';
 import { signupActionRHF } from '../_actions/signup';
 
-import type { SignupInput as FormValues } from '../_actions/signup';
+import type { SignupInput as FormValues } from '@/lib/validation/signup';
 
-export default function SignupForm({ provider }: { provider?: string }) {
+export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
     const {
         register,
         handleSubmit,
@@ -21,14 +21,14 @@ export default function SignupForm({ provider }: { provider?: string }) {
         formState: { errors, isSubmitting },
     } = useForm<FormValues>({
         defaultValues: {
-            email: '',
+            email: snsEmail || '',
+            name: '',
             password: '',
             passwordConfirm: '',
             phone: '',
             agreeTerms: false,
             agreePrivacy: false,
             agreeMarketing: false,
-            provider: (provider ?? 'sns').toLowerCase(),
         },
         mode: 'onSubmit',
     });
@@ -73,6 +73,28 @@ export default function SignupForm({ provider }: { provider?: string }) {
                 {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
 
+            {/* 이름 */}
+            <div className="space-y-1">
+                <Label
+                    htmlFor="name"
+                    className="flex items-center gap-2"
+                >
+                    <Mail className="h-4 w-4" />
+                    <span>이름 *</span>
+                </Label>
+                <Input
+                    id="name"
+                    type="text"
+                    placeholder="이름"
+                    aria-invalid={!!errors.name}
+                    {...register('name', {
+                        required: '이름을 입력해주세요.',
+                        minLength: { value: 2, message: '이름은 2자 이상 입력해주세요.' },
+                    })}
+                />
+                {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+            </div>
+
             {/* 비밀번호 */}
             <div className="space-y-1">
                 <Label
@@ -87,6 +109,10 @@ export default function SignupForm({ provider }: { provider?: string }) {
                     type="password"
                     placeholder="비밀번호"
                     aria-invalid={!!errors.password}
+                    {...register('password', {
+                        required: '비밀번호를 입력해주세요.',
+                        minLength: { value: 8, message: '8자 이상 입력해주세요.' },
+                    })}
                     {...register('password', {
                         required: '비밀번호를 입력해주세요.',
                         minLength: { value: 8, message: '8자 이상 입력해주세요.' },
@@ -284,13 +310,6 @@ export default function SignupForm({ provider }: { provider?: string }) {
                     />
                 </div>
             </div>
-
-            {/* provider 히든 */}
-            <input
-                type="hidden"
-                {...register('provider')}
-                value={(provider ?? 'sns').toLowerCase()}
-            />
 
             <Button
                 type="submit"
