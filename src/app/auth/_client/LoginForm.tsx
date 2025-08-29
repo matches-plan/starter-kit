@@ -11,9 +11,10 @@ import { loginActionRHF } from '../_actions/login';
 
 type Props = React.ComponentProps<'div'> & {
     redirectTo?: string;
+    step?: string;
 };
 
-export function LoginForm({ redirectTo, className, ...props }: Props) {
+export function LoginForm({ redirectTo, className, step, ...props }: Props) {
     const {
         register,
         handleSubmit,
@@ -23,7 +24,6 @@ export function LoginForm({ redirectTo, className, ...props }: Props) {
         defaultValues: {
             email: '',
             password: '',
-            redirectTo,
         },
         mode: 'onSubmit',
     });
@@ -106,38 +106,36 @@ export function LoginForm({ redirectTo, className, ...props }: Props) {
                                     Login
                                 </Button>
 
-                                <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                                    <span className="bg-card text-muted-foreground relative z-10 px-2">
-                                        Or continue with
-                                    </span>
-                                </div>
+                                {!step && (
+                                    <>
+                                        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+                                            <span className="bg-card text-muted-foreground relative z-10 px-2">
+                                                Or continue with
+                                            </span>
+                                        </div>
 
-                                <a
-                                    href={`/api/kakao/login?redirect=${redirectTo}`}
-                                    className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
-                                >
-                                    <svg
-                                        width="18"
-                                        height="18"
-                                        viewBox="0 0 24 24"
-                                        aria-hidden
-                                        className="mr-2"
-                                    >
-                                        <circle
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                        />
-                                    </svg>
-                                </a>
+                                        <a
+                                            href={`/api/kakao/login?redirect=${redirectTo}`}
+                                            className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
+                                        >
+                                            <svg
+                                                width="18"
+                                                height="18"
+                                                viewBox="0 0 24 24"
+                                                aria-hidden
+                                                className="mr-2"
+                                            >
+                                                <circle
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                />
+                                            </svg>
+                                        </a>
+                                    </>
+                                )}
                             </div>
                         </div>
-
-                        <input
-                            type="hidden"
-                            value={redirectTo ?? '/dashboard'}
-                            {...register('redirectTo')}
-                        />
                     </form>
                 </CardContent>
             </Card>

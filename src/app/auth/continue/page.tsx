@@ -26,7 +26,7 @@ export default async function Page({
     const { email } = cookie ? JSON.parse(cookie) : {};
 
     if (step === 'login') {
-        return <ContinueLogin />;
+        return <ContinueLogin step={step} />;
     }
 
     if (step === 'signup') {

@@ -3,6 +3,7 @@
 import { redirect } from 'next/navigation';
 import { signupSchema, type SignupInput } from '@/lib/validation/signup';
 import { cookies } from 'next/headers';
+import { ROUTES } from '../../../../config/routes';
 
 export async function signupActionRHF(
     raw: SignupInput,
@@ -38,37 +39,38 @@ export async function signupActionRHF(
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
+
     try {
         const user = await prisma.user.create({ data: { email, name, phone, passwordHash } });
 
+        // 소셜 연동 대기 쿠키(pending_oauth) 처리 (있을 때만)
         const cookieStore = await cookies();
-        const cookie = cookieStore.get('pending_oauth')?.value;
+        const pending = cookieStore.get('pending_oauth')?.value;
 
-        if (cookie) {
-            const { provider, providerAccountId, image } = JSON.parse(cookie);
+        if (pending) {
+            const { provider, providerAccountId, image } = JSON.parse(pending);
 
             await prisma.account.create({
                 data: {
                     userId: user.id,
-                    provider: provider,
-                    providerAccountId: providerAccountId,
+                    provider,
+                    providerAccountId,
                     type: 'oauth',
                 },
             });
 
             await prisma.user.update({
                 where: { id: user.id },
-                data: {
-                    image: image,
-                },
+                data: { image },
             });
         }
     } catch (error) {
         console.error(error);
     } finally {
+        // pending_oauth 는 여기서 삭제
         const cookieStore = await cookies();
         cookieStore.delete('pending_oauth');
     }
 
-    redirect('/auth/login');
+    redirect(ROUTES.AFTER_SIGNUP);
 }

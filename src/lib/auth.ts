@@ -1,6 +1,9 @@
+// src/lib/auth.ts
 import { sign, verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { sanitizeRedirect } from './safeRedirect';
+import { ROUTES } from '../../config/routes';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 if (!JWT_SECRET) throw new Error('JWT_SECRET is not set');
@@ -21,7 +24,6 @@ export function verifyJwt(token: string) {
 
 export async function createSession(payload: SessionPayload) {
     const token = createJwt(payload);
-
     const cookieStore = await cookies();
 
     cookieStore.set('session', token, {
@@ -29,6 +31,7 @@ export async function createSession(payload: SessionPayload) {
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 60,
+        secure: process.env.NODE_ENV === 'production',
     });
 
     return token;
@@ -38,5 +41,8 @@ export async function createSession(payload: SessionPayload) {
 export async function clearSession(redirectTo?: string) {
     const cookieStore = await cookies();
     cookieStore.delete('session');
-    redirect(redirectTo ?? '/auth/login');
+    cookieStore.delete('return_to');
+
+    const dest = sanitizeRedirect(redirectTo, ROUTES.AFTER_LOGOUT);
+    redirect(dest);
 }

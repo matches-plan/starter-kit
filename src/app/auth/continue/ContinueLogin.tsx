@@ -1,8 +1,8 @@
 import { ArrowLeft, LogIn } from 'lucide-react';
 import Link from 'next/link';
-import LoginForm from '../_client/ContinueLoginForm';
+import { LoginForm } from '../_client/LoginForm';
 
-export default function LoginPage() {
+export default function LoginPage({ step }: { step: string }) {
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-6">
@@ -27,7 +27,7 @@ export default function LoginPage() {
                     </div>
                 </div>
 
-                <LoginForm />
+                <LoginForm step={step} />
 
                 {/* 추가 옵션 */}
                 <div className="space-y-4">

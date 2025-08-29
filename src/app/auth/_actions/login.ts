@@ -1,14 +1,16 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { LoginInput, loginSchema } from '@/lib/validation/login';
 import { redirect } from 'next/navigation';
+import { LoginInput, loginSchema } from '@/lib/validation/login';
 import { createSession } from '@/lib/auth';
+import { sanitizeRedirect } from '@/lib/safeRedirect';
+import { ROUTES } from '../../../../config/routes';
 
 export async function loginActionRHF(
     raw: LoginInput,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
-    // 1) 서버 검증
+    // 1) 검증
     const parsed = loginSchema.safeParse(raw);
     if (!parsed.success) {
         const fieldErrors: Record<string, string> = {};
@@ -18,69 +20,48 @@ export async function loginActionRHF(
         }
         return { fieldErrors };
     }
-    const { email, password, redirectTo } = parsed.data;
+    const { email, password } = parsed.data;
 
-    // 3) 런타임 import (클라 번들 유입 방지)
+    // 2) 런타임 import
     const { prisma } = await import('@/lib/prisma');
     const bcrypt = await import('bcrypt');
 
-    // 5) 이메일 존재 검사
+    // 3) 유저 조회
     const lowerEmail = email.trim().toLowerCase();
     const user = await prisma.user.findUnique({
         where: { email: lowerEmail },
         select: { id: true, passwordHash: true, email: true, image: true },
     });
-
     if (!user || !user.passwordHash) {
-        return {
-            fieldErrors: {
-                email: '가입된 이메일이 없습니다.',
-            },
-        };
+        return { fieldErrors: { email: '가입된 이메일이 없습니다.' } };
     }
 
-    // 6) 비밀번호 검사
+    // 4) 비밀번호 확인
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordCorrect) {
         return { fieldErrors: { password: '비밀번호가 올바르지 않습니다.' } };
     }
 
+    const cookieStore = await cookies();
+
+    // (선택) pending_oauth 처리
     try {
-        const cookieStore = await cookies();
-        const cookie = cookieStore.get('pending_oauth')?.value;
-
-        if (cookie) {
-            const { provider, providerAccountId, image } = JSON.parse(cookie);
-
+        const pending = cookieStore.get('pending_oauth')?.value;
+        if (pending) {
+            const { provider, providerAccountId, image } = JSON.parse(pending);
             await prisma.account.create({
-                data: {
-                    userId: user.id,
-                    provider: provider,
-                    providerAccountId: providerAccountId,
-                    type: 'oauth',
-                },
+                data: { userId: user.id, provider, providerAccountId, type: 'oauth' },
             });
-
-            await prisma.user.update({
-                where: { id: user.id },
-                data: {
-                    image: image,
-                },
-            });
-
-            const cookieStore = await cookies();
+            await prisma.user.update({ where: { id: user.id }, data: { image } });
             cookieStore.delete('pending_oauth');
         }
-    } catch (e) {
-        console.log(e);
     } finally {
-        await createSession({
-            id: user.id,
-            email: user.email,
-            image: user.image ?? null,
-        });
+        await createSession({ id: user.id, email: user.email, image: user.image ?? null });
     }
 
-    const dest = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/dashboard';
+    const cookieReturnTo = cookieStore.get('return_to')?.value;
+    if (cookieReturnTo) cookieStore.delete('return_to');
+
+    const dest = sanitizeRedirect(cookieReturnTo, ROUTES.AFTER_LOGIN);
     redirect(dest);
 }
