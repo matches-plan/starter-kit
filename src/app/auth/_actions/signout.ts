@@ -1,8 +1,7 @@
-'use server'
+'use server';
 
-import { clearSession } from "@/lib/auth";
+import { clearSession } from '@/lib/auth';
 
 export async function signoutAction(redirectTo?: string) {
-
-  await clearSession(redirectTo);
+    await clearSession(redirectTo);
 }

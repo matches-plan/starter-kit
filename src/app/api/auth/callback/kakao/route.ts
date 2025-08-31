@@ -57,16 +57,11 @@ export async function GET(req: Request) {
     try {
         const url = new URL(req.url);
         const code = url.searchParams.get('code');
-        const state = url.searchParams.get('state');
 
         if (!code) return NextResponse.json({ error: 'Missing code' }, { status: 400 });
 
         const cookieStore = await cookies();
 
-        // const stateCookie = cookieStore.get('kakao_oauth_state')?.value;
-        // if (!stateCookie || stateCookie !== state) {
-        //     return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
-        // }
         cookieStore.delete('kakao_oauth_state');
 
         const { access_token } = await exchangeToken(code);
@@ -121,12 +116,12 @@ export async function GET(req: Request) {
                 image: user.image ?? null,
             });
 
-            console.log(state);
+            const redirect_to = cookieStore.get('return_to')?.value;
 
             const res = NextResponse.redirect(
                 `${process.env.AUTH_URL!}${
-                    typeof state === 'string' && state !== ''
-                        ? state
+                    typeof redirect_to === 'string' && redirect_to !== ''
+                        ? redirect_to
                         : '/dashboard'
                 }`,
             );

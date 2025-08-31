@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
 import type { LoginInput } from '@/lib/validation/login';
 import { loginActionRHF } from '../_actions/login';
+import Link from 'next/link';
 
 type Props = React.ComponentProps<'div'> & {
     redirectTo?: string;
@@ -52,7 +53,7 @@ export function LoginForm({ redirectTo, className, step, ...props }: Props) {
                         <div className="grid gap-6">
                             <div className="grid gap-6">
                                 <div className="grid gap-3">
-                                    <Label htmlFor="email">Email</Label>
+                                    <Label htmlFor="email">이메일</Label>
                                     <Input
                                         id="email"
                                         type="email"
@@ -75,17 +76,12 @@ export function LoginForm({ redirectTo, className, step, ...props }: Props) {
 
                                 <div className="grid gap-3">
                                     <div className="flex items-center">
-                                        <Label htmlFor="password">Password</Label>
-                                        <a
-                                            href="#"
-                                            className="ml-auto text-sm underline-offset-4 hover:underline"
-                                        >
-                                            Forgot your password?
-                                        </a>
+                                        <Label htmlFor="password">비밀번호</Label>
                                     </div>
                                     <Input
                                         id="password"
                                         type="password"
+                                        autoComplete="off"
                                         required
                                         {...register('password', {
                                             required: '비밀번호가 올바르지 않습니다.',
@@ -105,6 +101,35 @@ export function LoginForm({ redirectTo, className, step, ...props }: Props) {
                                 >
                                     Login
                                 </Button>
+
+                                {/* 이메일/비밀번호 찾기 링크 */}
+                                <div className="flex justify-center gap-1 text-sm">
+                                    {/* link search param no step */}
+                                    <Link
+                                        href={`?action=find-email`}
+                                        className="text-muted-foreground hover:text-primary hover:underline"
+                                    >
+                                        이메일 찾기
+                                    </Link>
+                                    <span className="text-muted-foreground">|</span>
+                                    <Link
+                                        href={`?action=find-password`}
+                                        className="text-muted-foreground hover:text-primary hover:underline"
+                                    >
+                                        비밀번호 찾기
+                                    </Link>
+                                </div>
+
+                                {/* 회원가입 링크 */}
+                                <p className="text-center text-sm text-muted-foreground">
+                                    아직 계정이 없나요?{' '}
+                                    <a
+                                        href="/auth/signup"
+                                        className="underline underline-offset-4"
+                                    >
+                                        회원가입
+                                    </a>
+                                </p>
 
                                 {!step && (
                                     <>

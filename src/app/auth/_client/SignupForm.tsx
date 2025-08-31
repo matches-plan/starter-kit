@@ -113,10 +113,6 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                         required: '비밀번호를 입력해주세요.',
                         minLength: { value: 8, message: '8자 이상 입력해주세요.' },
                     })}
-                    {...register('password', {
-                        required: '비밀번호를 입력해주세요.',
-                        minLength: { value: 8, message: '8자 이상 입력해주세요.' },
-                    })}
                 />
                 {errors.password && (
                     <p className="text-xs text-destructive">{errors.password.message}</p>
