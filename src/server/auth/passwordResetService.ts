@@ -6,6 +6,7 @@ import { PURPOSE, SMS_SENDER, JWT_SECRET } from './constants';
 import { createOtpChallenge, checkOtpChallenge } from './otp';
 import { resetRequestSchema, resetVerifySchema, passwordUpdateSchema } from './schemas';
 import { sendSMS } from '@/lib/sms';
+import { prisma } from '@/lib/prisma';
 
 type FieldErrors = Record<string, string>;
 
@@ -21,7 +22,6 @@ export async function requestResetOtp(input: z.infer<typeof resetRequestSchema>)
 
     const { email, name, phone } = parsed.data;
 
-    const { prisma } = await import('@/lib/prisma');
     const exists = await prisma.user.findFirst({
         where: { email, name, phone },
         select: { id: true },
@@ -55,7 +55,6 @@ export async function verifyResetOtp(input: z.infer<typeof resetVerifySchema>) {
     const otpCheck = await checkOtpChallenge(challengeId, code, PURPOSE.resetPw);
     if (!otpCheck.ok) return { ok: false as const, error: otpCheck.reason };
 
-    const { prisma } = await import('@/lib/prisma');
     const user = await prisma.user.findFirst({
         where: { email, name, phone: otpCheck.phone },
         select: { id: true },
@@ -83,18 +82,17 @@ export async function updatePassword(input: z.infer<typeof passwordUpdateSchema>
 
     const { resetToken, newPassword } = parsed.data;
 
-    let userId: string | number | undefined;
+    let userId: string | undefined;
     try {
         const payload = verifyJwt(resetToken, JWT_SECRET) as { uid: string | number; kind: string };
         if (payload.kind !== 'pw_reset') throw new Error('BAD_KIND');
-        userId = payload.uid;
+        userId = String(payload.uid);
     } catch {
         return { ok: false as const, error: 'TOKEN_INVALID' };
     }
 
-    const { prisma } = await import('@/lib/prisma');
     const hash = await bcrypt.hash(newPassword, 12);
-    await prisma.user.update({ where: { id: userId as any }, data: { passwordHash: hash } });
+    await prisma.user.update({ where: { id: userId }, data: { passwordHash: hash } });
 
     return { ok: true as const };
 }

@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation';
 import { sanitizeRedirect } from './safeRedirect';
 import { ROUTES } from '../../config/routes';
 
+export const SESSION_COOKIE = 'session';
+
 const JWT_SECRET = process.env.JWT_SECRET!;
 if (!JWT_SECRET) throw new Error('JWT_SECRET is not set');
 
@@ -12,6 +14,8 @@ export type SessionPayload = {
     id: number | string;
     email: string;
     image?: string | null;
+    name?: string | null;
+    phone?: string | null;
 };
 
 export function createJwt(payload: SessionPayload) {
@@ -22,27 +26,45 @@ export function verifyJwt(token: string) {
     return verify(token, JWT_SECRET) as SessionPayload;
 }
 
+export async function readSession(): Promise<SessionPayload | null> {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE)?.value;
+
+    if (!token) {
+        return null;
+    }
+    try {
+        return verifyJwt(token);
+    } catch {
+        return null;
+    }
+}
+
 export async function createSession(payload: SessionPayload) {
-    const token = createJwt(payload);
     const cookieStore = await cookies();
 
-    cookieStore.set('session', token, {
+    const token = createJwt(payload);
+    cookieStore.set(SESSION_COOKIE, token, {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
         maxAge: 60 * 60,
         secure: process.env.NODE_ENV === 'production',
     });
-
     return token;
 }
 
-/** 로그아웃 */
-export async function clearSession(redirectTo?: string) {
+/** 로그아웃 (리다이렉트 없음, API에서 사용) */
+export async function clearSessionCookie() {
     const cookieStore = await cookies();
-    cookieStore.delete('session');
-    cookieStore.delete('return_to');
 
+    cookieStore.delete(SESSION_COOKIE);
+}
+
+/** 로그아웃 (리다이렉트 포함, 기존 로직 유지) */
+export async function clearSession(redirectTo?: string) {
+    await clearSessionCookie();
     const dest = sanitizeRedirect(redirectTo, ROUTES.AFTER_LOGOUT);
+
     redirect(dest);
 }

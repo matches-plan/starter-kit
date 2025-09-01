@@ -11,11 +11,11 @@ import { loginActionRHF } from '../_actions/login';
 import Link from 'next/link';
 
 type Props = React.ComponentProps<'div'> & {
-    redirectTo?: string;
+    returnTo?: string;
     step?: string;
 };
 
-export function LoginForm({ redirectTo, className, step, ...props }: Props) {
+export function LoginForm({ returnTo, className, step, ...props }: Props) {
     const {
         register,
         handleSubmit,
@@ -30,7 +30,9 @@ export function LoginForm({ redirectTo, className, step, ...props }: Props) {
     });
 
     const onSubmit = async (values: LoginInput) => {
-        const res = await loginActionRHF(values);
+        const searchParams = returnTo ? returnTo : '';
+
+        const res = await loginActionRHF(values, searchParams);
         if (res?.fieldErrors) {
             Object.entries(res.fieldErrors).forEach(([name, message]) => {
                 setError(name as keyof LoginInput, { type: 'server', message });
@@ -140,7 +142,7 @@ export function LoginForm({ redirectTo, className, step, ...props }: Props) {
                                         </div>
 
                                         <a
-                                            href={`/api/kakao/login?redirect=${redirectTo}`}
+                                            href={`/api/kakao/login?return_to=${returnTo}`}
                                             className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
                                         >
                                             <svg

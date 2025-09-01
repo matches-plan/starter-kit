@@ -1,6 +1,7 @@
 import 'server-only';
 import bcrypt from 'bcrypt';
 import { OTP_MAX_ATTEMPTS, OTP_TTL_MS } from './constants';
+import { prisma } from '@/lib/prisma';
 
 type OtpCheckFail = 'NOT_FOUND' | 'EXPIRED' | 'TOO_MANY_TRIES' | 'INVALID';
 
@@ -9,7 +10,6 @@ export function generateOtp(): string {
 }
 
 export async function createOtpChallenge(phone: string, purpose: string) {
-    const { prisma } = await import('@/lib/prisma');
     const code = generateOtp();
     const codeHash = await bcrypt.hash(code, 10);
 
@@ -30,7 +30,6 @@ export async function checkOtpChallenge(
     code: string,
     expectedPurpose: string,
 ): Promise<{ ok: true; phone: string } | { ok: false; reason: OtpCheckFail }> {
-    const { prisma } = await import('@/lib/prisma');
 
     const record = await prisma.verificationCode.findUnique({
         where: { id: challengeId },

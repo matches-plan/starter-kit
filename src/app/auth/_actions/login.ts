@@ -9,7 +9,9 @@ import { ROUTES } from '../../../../config/routes';
 
 export async function loginActionRHF(
     raw: LoginInput,
+    searchParams?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
+
     // 1) 검증
     const parsed = loginSchema.safeParse(raw);
     if (!parsed.success) {
@@ -59,9 +61,6 @@ export async function loginActionRHF(
         await createSession({ id: user.id, email: user.email, image: user.image ?? null });
     }
 
-    const cookieReturnTo = cookieStore.get('return_to')?.value;
-    if (cookieReturnTo) cookieStore.delete('return_to');
-
-    const dest = sanitizeRedirect(cookieReturnTo, ROUTES.AFTER_LOGIN);
+    const dest = sanitizeRedirect(searchParams, ROUTES.AFTER_LOGIN);
     redirect(dest);
 }

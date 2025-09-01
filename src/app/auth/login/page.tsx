@@ -8,12 +8,12 @@ export default async function LoginPage({
 }: {
     searchParams: Promise<{
         action?: string;
-        redirect?: string;
+        return_to?: string;
     }>;
 }) {
     const sp = await searchParams;
     const action = sp.action ?? null;
-    const redirectTo = sp.redirect ?? '';
+    const returnTo = sp.return_to ?? '';
 
     if (action === 'find-email') {
         return <FindEmail />;
@@ -35,7 +35,7 @@ export default async function LoginPage({
                     </div>
                     Acme Inc.
                 </a>
-                <LoginForm redirectTo={redirectTo} />
+                <LoginForm returnTo={returnTo} />
             </div>
         </div>
     );

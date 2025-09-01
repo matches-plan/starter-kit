@@ -5,6 +5,7 @@ import { maskEmail } from '@/lib/mask';
 import { PURPOSE, SMS_SENDER } from './constants';
 import { createOtpChallenge, checkOtpChallenge } from './otp';
 import { idRequestSchema, idVerifySchema } from './schemas';
+import { prisma } from '@/lib/prisma';
 
 type FieldErrors = Record<string, string>;
 
@@ -21,7 +22,6 @@ export async function requestIdOtp(input: z.infer<typeof idRequestSchema>) {
     const { name, phone } = parsed.data;
 
     // name phone 존재하는지 확인
-    const { prisma } = await import('@/lib/prisma');
     const user = await prisma.user.findFirst({
         where: { name, phone },
         select: { id: true },
@@ -58,7 +58,6 @@ export async function verifyIdOtp(input: z.infer<typeof idVerifySchema>) {
         return { ok: false as const, error: otpCheck.reason };
     }
 
-    const { prisma } = await import('@/lib/prisma');
     const users = await prisma.user.findMany({
         where: { name, phone: otpCheck.phone },
         select: { email: true },

@@ -6,18 +6,8 @@ import { cookies } from 'next/headers';
 const KAUTH_AUTHORIZE = 'https://kauth.kakao.com/oauth/authorize';
 
 export async function GET(req: Request) {
-    const redirectTo = new URL(req.url).searchParams.get('redirect');
-    const state = redirectTo ?? '';
-
-    // const cookieStore = await cookies();
-
-    // cookieStore.set('kakao_oauth_state', state, {
-    //     httpOnly: true,
-    //     sameSite: 'lax',
-    //     secure: false,
-    //     path: '/',
-    //     maxAge: 60 * 5,
-    // });
+    const return_to = new URL(req.url).searchParams.get('return_to');
+    const state = return_to ?? '';
 
     const url = new URL(KAUTH_AUTHORIZE);
     url.searchParams.set('response_type', 'code');
