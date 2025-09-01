@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { signoutAction } from '../auth/_actions/signout';
+import { signoutAction } from '../../server/auth/signout';
 import DashboardClient from './DashboardClient';
+import { ROUTES } from '../../../config/routes';
 
 export default function DashboardPage() {
     return (
@@ -15,7 +16,7 @@ export default function DashboardPage() {
                 <form
                     action={async () => {
                         'use server';
-                        await signoutAction();
+                        await signoutAction(ROUTES.AFTER_LOGOUT);
                     }}
                 >
                     <Button type="submit">로그아웃</Button>

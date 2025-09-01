@@ -1,8 +1,6 @@
 export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-
 const KAUTH_AUTHORIZE = 'https://kauth.kakao.com/oauth/authorize';
 
 export async function GET(req: Request) {

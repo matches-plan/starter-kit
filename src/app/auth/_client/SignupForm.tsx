@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Mail, Phone, ShieldCheck, Key, MinusIcon } from 'lucide-react';
-import { signupActionRHF } from '../_actions/signup';
+import { signupActionRHF } from '../../../server/auth/signup';
 
 import type { SignupInput as FormValues } from '@/lib/validation/signup';
 

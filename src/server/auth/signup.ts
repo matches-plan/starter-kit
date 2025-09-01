@@ -3,10 +3,11 @@
 import { redirect } from 'next/navigation';
 import { signupSchema, type SignupInput } from '@/lib/validation/signup';
 import { cookies } from 'next/headers';
-import { ROUTES } from '../../../../config/routes';
+import { ROUTES } from '../../../config/routes';
 
 export async function signupActionRHF(
     raw: SignupInput,
+    redirectTo?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
     // 1) 서버 검증
     const parsed = signupSchema.safeParse(raw);

@@ -7,8 +7,10 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import { useForm } from 'react-hook-form';
 import type { LoginInput } from '@/lib/validation/login';
-import { loginActionRHF } from '../_actions/login';
+import { loginActionRHF } from '../../../server/auth/login';
 import Link from 'next/link';
+import { ROUTES } from '../../../../config/routes';
+import KakaoLoginButton from '@/components/auth/KakaoLoginButton';
 
 type Props = React.ComponentProps<'div'> & {
     returnTo?: string;
@@ -32,7 +34,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
     const onSubmit = async (values: LoginInput) => {
         const searchParams = returnTo ? returnTo : '';
 
-        const res = await loginActionRHF(values, searchParams);
+        const res = await loginActionRHF(values, searchParams, ROUTES.AFTER_LOGIN);
         if (res?.fieldErrors) {
             Object.entries(res.fieldErrors).forEach(([name, message]) => {
                 setError(name as keyof LoginInput, { type: 'server', message });
@@ -141,8 +143,8 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                             </span>
                                         </div>
 
-                                        <a
-                                            href={`/api/kakao/login?return_to=${returnTo}`}
+                                        <KakaoLoginButton
+                                            returnTo={returnTo}
                                             className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
                                         >
                                             <svg
@@ -158,7 +160,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                                     r="10"
                                                 />
                                             </svg>
-                                        </a>
+                                        </KakaoLoginButton>
                                     </>
                                 )}
                             </div>

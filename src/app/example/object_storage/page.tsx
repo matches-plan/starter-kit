@@ -8,7 +8,7 @@ export default async function ObjectStoragePage() {
 
     async function reloadData() {
         'use server';
-        revalidatePath('/example/object_storage'); // 현재 경로
+        revalidatePath('/example/object_storage');
     }
 
     return (

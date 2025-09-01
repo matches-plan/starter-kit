@@ -5,13 +5,12 @@ import { redirect } from 'next/navigation';
 import { LoginInput, loginSchema } from '@/lib/validation/login';
 import { createSession } from '@/lib/auth';
 import { sanitizeRedirect } from '@/lib/safeRedirect';
-import { ROUTES } from '../../../../config/routes';
 
 export async function loginActionRHF(
     raw: LoginInput,
     searchParams?: string,
+    redirectTo?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
-
     // 1) 검증
     const parsed = loginSchema.safeParse(raw);
     if (!parsed.success) {
@@ -32,7 +31,7 @@ export async function loginActionRHF(
     const lowerEmail = email.trim().toLowerCase();
     const user = await prisma.user.findUnique({
         where: { email: lowerEmail },
-        select: { id: true, passwordHash: true, email: true, image: true },
+        select: { id: true, name: true, passwordHash: true, email: true, image: true },
     });
     if (!user || !user.passwordHash) {
         return { fieldErrors: { email: '가입된 이메일이 없습니다.' } };
@@ -58,9 +57,22 @@ export async function loginActionRHF(
             cookieStore.delete('pending_oauth');
         }
     } finally {
-        await createSession({ id: user.id, email: user.email, image: user.image ?? null });
+        await createSession({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            image: user.image ?? null,
+        });
     }
 
-    const dest = sanitizeRedirect(searchParams, ROUTES.AFTER_LOGIN);
-    redirect(dest);
+    // 로그인 후 리다이렉트
+    if (searchParams) {
+        const dest = sanitizeRedirect(searchParams);
+        redirect(dest);
+    } else if ( redirectTo ) {
+        const dest = sanitizeRedirect(redirectTo);
+        redirect(dest);
+    }
+
+    return {};
 }

@@ -3,7 +3,6 @@ import { sign, verify } from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { sanitizeRedirect } from './safeRedirect';
-import { ROUTES } from '../../config/routes';
 
 export const SESSION_COOKIE = 'session';
 
@@ -64,7 +63,10 @@ export async function clearSessionCookie() {
 /** 로그아웃 (리다이렉트 포함, 기존 로직 유지) */
 export async function clearSession(redirectTo?: string) {
     await clearSessionCookie();
-    const dest = sanitizeRedirect(redirectTo, ROUTES.AFTER_LOGOUT);
 
-    redirect(dest);
+    if (redirectTo) {
+        const dest = sanitizeRedirect(redirectTo);
+
+        redirect(dest);
+    }
 }
