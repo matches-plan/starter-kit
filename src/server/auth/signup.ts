@@ -3,10 +3,11 @@
 import { redirect } from 'next/navigation';
 import { signupSchema, type SignupInput } from '@/lib/validation/signup';
 import { cookies } from 'next/headers';
-import { ROUTES } from '../../../../config/routes';
+import { ROUTES } from '../../../config/routes';
 
 export async function signupActionRHF(
     raw: SignupInput,
+    redirectTo?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
     // 1) 서버 검증
     const parsed = signupSchema.safeParse(raw);
@@ -34,6 +35,20 @@ export async function signupActionRHF(
         return {
             fieldErrors: {
                 email: '이미 가입된 이메일입니다. "기존 계정으로 연결하기"를 선택해주세요.',
+            },
+        };
+    }
+
+    // 핸드폰 번호 중복 검사
+    const lowerPhone = phone.trim().toLowerCase();
+    const phoneOwner = await prisma.user.findFirst({
+        where: { phone: lowerPhone },
+        select: { id: true },
+    });
+    if (phoneOwner) {
+        return {
+            fieldErrors: {
+                phone: '이미 가입된 핸드폰 번호입니다. "기존 계정으로 연결하기"를 선택해주세요.',
             },
         };
     }
@@ -67,10 +82,9 @@ export async function signupActionRHF(
     } catch (error) {
         console.error(error);
     } finally {
-        // pending_oauth 는 여기서 삭제
         const cookieStore = await cookies();
         cookieStore.delete('pending_oauth');
     }
 
-    redirect(ROUTES.AFTER_SIGNUP);
+    redirect(ROUTES.AFTER_LOGOUT);
 }

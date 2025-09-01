@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Mail, Phone, ShieldCheck, Key, MinusIcon } from 'lucide-react';
-import { signupActionRHF } from '../_actions/signup';
+import { signupActionRHF } from '../../../server/auth/signup';
 
 import type { SignupInput as FormValues } from '@/lib/validation/signup';
 
@@ -109,10 +109,6 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     type="password"
                     placeholder="비밀번호"
                     aria-invalid={!!errors.password}
-                    {...register('password', {
-                        required: '비밀번호를 입력해주세요.',
-                        minLength: { value: 8, message: '8자 이상 입력해주세요.' },
-                    })}
                     {...register('password', {
                         required: '비밀번호를 입력해주세요.',
                         minLength: { value: 8, message: '8자 이상 입력해주세요.' },

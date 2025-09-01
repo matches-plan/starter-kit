@@ -8,7 +8,7 @@ import { Label } from '@radix-ui/react-label';
 import { Key, Mail } from 'lucide-react';
 
 import type { LoginInput } from '@/lib/validation/login';
-import { loginActionRHF } from '../_actions/login';
+import { loginActionRHF } from '../../../server/auth/login';
 
 export default function LoginForm() {
     const {

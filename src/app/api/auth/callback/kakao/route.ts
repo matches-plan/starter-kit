@@ -3,7 +3,6 @@ export const runtime = 'nodejs';
 
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { SignJWT } from 'jose';
 import { createSession } from '@/lib/auth';
 
 interface KakaoUser {
@@ -57,16 +56,12 @@ export async function GET(req: Request) {
     try {
         const url = new URL(req.url);
         const code = url.searchParams.get('code');
-        const state = url.searchParams.get('state');
+        const stateRaw = url.searchParams.get('state');
 
         if (!code) return NextResponse.json({ error: 'Missing code' }, { status: 400 });
 
         const cookieStore = await cookies();
 
-        // const stateCookie = cookieStore.get('kakao_oauth_state')?.value;
-        // if (!stateCookie || stateCookie !== state) {
-        //     return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
-        // }
         cookieStore.delete('kakao_oauth_state');
 
         const { access_token } = await exchangeToken(code);
@@ -121,13 +116,9 @@ export async function GET(req: Request) {
                 image: user.image ?? null,
             });
 
-            console.log(state);
-
             const res = NextResponse.redirect(
                 `${process.env.AUTH_URL!}${
-                    typeof state === 'string' && state !== ''
-                        ? state
-                        : '/dashboard'
+                    typeof stateRaw === 'string' && stateRaw !== '' ? stateRaw : '/dashboard'
                 }`,
             );
             res.cookies.set('session', token, {

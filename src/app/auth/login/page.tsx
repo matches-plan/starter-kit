@@ -1,26 +1,27 @@
 import { LoginForm } from '@/app/auth/_client/LoginForm';
 import { GalleryVerticalEnd } from 'lucide-react';
-
-const MAP: Record<string, string> = {
-    USER_NOT_FOUND: '존재하지 않는 이메일입니다.',
-    INVALID_PASSWORD: '비밀번호가 올바르지 않습니다.',
-    VALIDATION_ERROR: '입력값이 올바르지 않습니다.',
-    LOGIN_FAILED: '로그인에 실패했습니다.',
-};
+import { FindEmail } from './FindEmail';
+import { FindPassword } from './FindPassword';
 
 export default async function LoginPage({
     searchParams,
 }: {
-    searchParams: Promise<{ error?: string; code?: string; redirect?: string }>;
+    searchParams: Promise<{
+        action?: string;
+        return_to?: string;
+    }>;
 }) {
     const sp = await searchParams;
-    const redirectTo = sp.redirect ?? '';
+    const action = sp.action ?? null;
+    const returnTo = sp.return_to ?? '';
 
-    const message = sp.code
-        ? MAP[sp.code] ?? sp.code
-        : sp.error === 'CredentialsSignin'
-        ? '로그인에 실패했습니다.'
-        : undefined;
+    if (action === 'find-email') {
+        return <FindEmail />;
+    }
+
+    if (action === 'find-password') {
+        return <FindPassword />;
+    }
 
     return (
         <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -34,14 +35,7 @@ export default async function LoginPage({
                     </div>
                     Acme Inc.
                 </a>
-
-                {message && (
-                    <div className="mb-4 rounded border px-3 py-2 text-sm text-red-600">
-                        {message}
-                    </div>
-                )}
-
-                <LoginForm redirectTo={redirectTo} />
+                <LoginForm returnTo={returnTo} />
             </div>
         </div>
     );

@@ -59,3 +59,15 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
+
+model VerificationCode {
+    id        String   @id @default(cuid())
+    phone     String
+    purpose   String   // 'find_id' 등
+    codeHash  String
+    expiresAt DateTime
+    attempts  Int      @default(0)
+    createdAt DateTime @default(now())
+
+    @@index([phone, purpose])
+}
