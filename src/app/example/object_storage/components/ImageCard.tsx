@@ -1,6 +1,7 @@
 'use client';
 
 import { deleteObject, getDownloadLink } from '@/components/api/storage';
+import { useAuth } from '@/components/auth/AuthClientProvider';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { Download, Trash2 } from 'lucide-react';
@@ -14,6 +15,7 @@ export default function ImageCard({
     url: string;
     reloadData: () => Promise<void>;
 }) {
+    const user = useAuth();
     return (
         <Card>
             <CardHeader>{objectKey}</CardHeader>
@@ -46,6 +48,7 @@ export default function ImageCard({
                     </a>
                 </Button>
                 <Button
+                    disabled={!user}
                     variant="outline"
                     size="icon"
                     className="border-red-400 text-red-400 hover:bg-red-600 hover:text-red-50"
