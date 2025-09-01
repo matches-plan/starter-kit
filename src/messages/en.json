@@ -1,0 +1,18 @@
+{
+    "login": {
+        "title": "Welcome",
+        "description": "Login with your email",
+        "email_label": "Email",
+        "email_placeholder": "m@example.com",
+        "password_label": "Password",
+        "password_placeholder": "Enter your password",
+        "forgot_password_link": "Forgot your password?",
+        "kakao_login": "Login with Kakao",
+        "login_button": "Login",
+        "social_login": "Social Login",
+        "apple_login": "Login with Apple",
+        "google_login": "Login with Google",
+        "no_account": "Don't have an account yet?",
+        "sign_up_link": "Sign Up"
+    }
+}

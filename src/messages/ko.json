@@ -1,0 +1,17 @@
+{
+    "login": {
+        "title": "환영합니다",
+        "description": "이메일로 로그인",
+        "email_label": "이메일",
+        "email_placeholder": "m@example.com",
+        "password_label": "비밀번호",
+        "password_placeholder": "비밀번호를 입력하세요",
+        "forgot_password_link": "비밀번호를 잊으셨나요?",
+        "login_button": "로그인",
+        "social_login": "소셜 로그인",
+        "apple_login": "Apple로 로그인",
+        "google_login": "Google로 로그인",
+        "no_account": "아직 계정이 없으신가요?",
+        "sign_up_link": "회원가입"
+    }
+}

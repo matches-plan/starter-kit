@@ -1,7 +1,7 @@
-import { LoginForm } from '@/app/auth/_client/LoginForm';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { FindEmail } from './FindEmail';
 import { FindPassword } from './FindPassword';
+import { LoginForm } from '../_client/LoginForm';
 
 export default async function LoginPage({
     searchParams,

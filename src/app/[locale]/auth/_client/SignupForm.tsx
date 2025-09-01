@@ -7,9 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Mail, Phone, ShieldCheck, Key, MinusIcon } from 'lucide-react';
-import { signupActionRHF } from '../../../server/auth/signup';
 
 import type { SignupInput as FormValues } from '@/lib/validation/signup';
+import { signupActionRHF } from '@/server/auth/signup';
 
 export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
     const {
