@@ -1,0 +1,184 @@
+{
+    "auth": {
+        "login": {
+            "title": "환영합니다",
+            "description": "이메일로 로그인",
+            "email_label": "이메일",
+            "email_label_placeholder": "이메일을(를) 입력해주세요.",
+            "email_pattern_error": "이메일 형식이 올바르지 않습니다.",
+            "email_placeholder": "m@example.com",
+            "forgot_email_link": "이메일 찾기",
+            "password_label": "비밀번호",
+            "password_pattern_error": "비밀번호가 올바르지 않습니다.",
+            "password_placeholder": "비밀번호를 입력하세요",
+            "forgot_password_link": "비밀번호 찾기",
+            "login": "로그인",
+            "social_login": "소셜 로그인",
+            "kakao_login": "Kakao로 로그인",
+            "apple_login": "Apple로 로그인",
+            "google_login": "Google로 로그인",
+            "no_account": "아직 계정이 없으신가요?",
+            "sign_up_link": "회원가입",
+            "error": {
+                "email_not_found": "가입된 이메일이 없습니다.",
+                "invalid_password": "비밀번호가 올바르지 않습니다."
+            }
+        },
+        "findEmail": {
+            "title": "이메일 찾기",
+            "subtitle": {
+                "form": "가입 시 입력하신 정보를 입력해주세요",
+                "verify": "전송된 6자리 인증번호를 입력해주세요",
+                "done": "확인이 완료되었습니다"
+            },
+            "name_label": "이름",
+            "name_placeholder": "이름을 입력하세요",
+            "name_pattern_error": "이름을 올바르게 입력해주세요.",
+            "phone_label": "전화번호",
+            "phone_pattern_error": "전화번호 형식이 올바르지 않습니다.",
+            "send_code_button": "인증번호 받기",
+            "code_label": "인증번호 6자리",
+            "code_placeholder": "123456",
+            "code_pattern_error": "6자리 숫자를 입력해주세요.",
+            "verify_button": "인증하기",
+            "resend_code": "인증번호 재전송",
+            "result": {
+                "not_found": "해당 정보로 가입된 계정을 찾을 수 없습니다.",
+                "list_label": "가입된 이메일"
+            },
+            "go_to_login_button": "로그인하러 가기",
+            "back_to_login_link": "로그인 화면으로 돌아가기"
+        },
+        "findPassword": {
+            "title": "비밀번호 찾기",
+            "subtitle": {
+                "form": "가입 시 입력하신 정보를 입력해주세요",
+                "verify": "전송된 6자리 인증번호를 입력해주세요",
+                "reset": "새로운 비밀번호를 입력해주세요"
+            },
+            "email_label": "이메일",
+            "email_placeholder": "example@email.com",
+            "email_required": "이메일을 입력해주세요.",
+            "email_pattern_error": "이메일 형식이 올바르지 않습니다.",
+            "name_label": "이름",
+            "name_placeholder": "홍길동",
+            "name_required": "이름을 입력해주세요.",
+            "name_pattern_error": "이름은 2자 이상 입력해주세요.",
+            "phone_label": "전화번호",
+            "phone_placeholder": "전화번호를 입력해주세요.",
+            "phone_pattern_error": "전화번호 형식이 올바르지 않습니다.",
+            "send_code_button": "인증번호 받기",
+            "code_label": "인증번호 6자리",
+            "code_placeholder": "123456",
+            "code_pattern_error": "6자리 숫자를 입력해주세요.",
+            "verify_button": "인증하기",
+            "new_password_label": "새 비밀번호",
+            "new_password_pattern_error": "비밀번호는 8자 이상이어야 합니다.",
+            "new_password_confirm_label": "새 비밀번호 확인",
+            "password_change": "비밀번호 변경",
+            "remember_account": "계정이 기억나셨나요?",
+            "login_button": "로그인하기"
+        },
+        "signup": {
+            "email_label": "이메일",
+            "email_placeholder": "example@email.com",
+            "email_required": "이메일을 입력해주세요.",
+            "email_pattern_error": "이메일 형식이 올바르지 않습니다.",
+            "name_label": "이름",
+            "name_placeholder": "홍길동",
+            "name_required": "이름을 입력해주세요.",
+            "name_pattern_error": "이름은 2자 이상 입력해주세요.",
+            "password_label": "비밀번호",
+            "password_placeholder": "비밀번호를 입력하세요",
+            "password_required": "비밀번호를 입력해주세요.",
+            "password_pattern_error": "비밀번호는 8자 이상이어야 합니다.",
+            "password_confirm_label": "비밀번호 확인",
+            "password_confirm_placeholder": "비밀번호를 다시 입력하세요",
+            "password_confirm_required": "비밀번호 확인을 입력해주세요.",
+            "password_confirm_error": "비밀번호가 일치하지 않습니다.",
+            "phone_label": "전화번호",
+            "phone_required": "전화번호를 입력해주세요.",
+            "phone_pattern_error": "전화번호 형식이 올바르지 않습니다.",
+            "agreeTerms_required": "약관 동의는 필수입니다.",
+            "agreeTerms_label": "서비스 이용약관에 동의합니다.",
+            "agreePrivacy_required": "개인정보 처리방침 동의는 필수입니다.",
+            "agreePrivacy_label": "개인정보 처리방침에 동의합니다.",
+            "agreeMarketing_required": "마케팅 정보 수신에 동의합니다 (선택)",
+            "agreeMarketing_label": "이벤트, 혜택 등의 알림을 받을 수 있습니다",
+            "signing": "가입 중...",
+            "signup": "회원가입",
+            "errors": {
+                "email_exists": "이미 가입된 이메일입니다. \"기존 계정으로 연결하기\"를 선택해주세요.",
+                "phone_exists": "이미 가입된 핸드폰 번호입니다. \"기존 계정으로 연결하기\"를 선택해주세요."
+            }
+        },
+        "continue": {
+            "title": "반갑습니다!",
+            "description": "계정 상태를 확인해주세요",
+            "options": {
+                "member": {
+                    "title": "이미 회원입니다",
+                    "desc": "이전에 이메일로 회원가입을 진행한 적이 있어요",
+                    "button": "기존 계정으로 연결하기"
+                },
+                "new": {
+                    "title": "처음 가입합니다",
+                    "desc": "이메일로 회원가입을 한 적이 없어요",
+                    "button": "새 계정 만들기"
+                }
+            },
+            "help": {
+                "text": "잘 모르겠다면 <em>도움말</em>을 확인해보세요",
+                "link_label": "도움말"
+            }
+        },
+        "continueLogin": {
+            "back": "이전으로",
+            "title": "계정 연결하기",
+            "description": "기존 이메일 계정과 계정을 연결해주세요",
+            "or": "또는",
+            "no_account": "아직 계정이 없으신가요?",
+            "signup_link": "새 계정 만들기"
+        },
+        "continueSignup": {
+            "back": "이전으로",
+            "title": "가입 완료하기",
+            "description": "서비스 이용을 위한 추가 정보를 입력해주세요",
+            "card_title": "추가 정보 입력",
+            "card_desc": "이메일과 전화번호를 입력하여 계정을 완성해주세요",
+            "already": {
+                "rich": "이미 계정이 있으신가요? <link>다시 선택하기</link>"
+            }
+        },
+        "common": {
+            "errors": {
+                "VALIDATION_ERROR": "입력값을 확인해주세요.",
+                "SEND_FAILED": "인증번호 전송에 실패했습니다.",
+                "VERIFY_FAILED": "인증번호 확인에 실패했습니다.",
+                "INVALID": "인증번호가 올바르지 않습니다.",
+                "EXPIRED": "인증번호가 만료되었습니다.",
+                "TOO_MANY_TRIES": "시도 횟수를 초과했습니다.",
+                "NOT_FOUND": "인증 세션을 찾을 수 없습니다.",
+                "USER_NOT_FOUND": "해당 정보를 찾을 수 없습니다.",
+                "TOKEN_INVALID": "토큰이 유효하지 않습니다.",
+                "UNKNOWN": "알 수 없는 오류가 발생했습니다."
+            }
+        }
+    },
+    "dashboard": {
+        "title": "대시보드",
+        "logout": "로그아웃",
+        "login_required": "로그인이 필요합니다.",
+        "greeting": "안녕하세요, {name}님!"
+    },
+    "layout": {
+        "navbar": {
+            "brand": "Your App",
+            "search_placeholder": "검색...",
+            "logout": "로그아웃",
+            "hello_name": "안녕하세요, {name}님!",
+            "login": "로그인",
+            "signup": "회원가입"
+        }
+    }
+}

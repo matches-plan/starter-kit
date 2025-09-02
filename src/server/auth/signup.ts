@@ -3,12 +3,14 @@
 import { redirect } from 'next/navigation';
 import { signupSchema, type SignupInput } from '@/lib/validation/signup';
 import { cookies } from 'next/headers';
-import { ROUTES } from '../../../config/routes';
+import { getTranslations } from 'next-intl/server';
 
 export async function signupActionRHF(
     raw: SignupInput,
     redirectTo?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
+    const tErr = await getTranslations('auth.signup.errors');
+
     // 1) 서버 검증
     const parsed = signupSchema.safeParse(raw);
     if (!parsed.success) {
@@ -34,7 +36,7 @@ export async function signupActionRHF(
     if (owner) {
         return {
             fieldErrors: {
-                email: '이미 가입된 이메일입니다. "기존 계정으로 연결하기"를 선택해주세요.',
+                email: tErr('email_exists'),
             },
         };
     }
@@ -48,7 +50,7 @@ export async function signupActionRHF(
     if (phoneOwner) {
         return {
             fieldErrors: {
-                phone: '이미 가입된 핸드폰 번호입니다. "기존 계정으로 연결하기"를 선택해주세요.',
+                phone: tErr('phone_exists'),
             },
         };
     }
@@ -86,5 +88,9 @@ export async function signupActionRHF(
         cookieStore.delete('pending_oauth');
     }
 
-    redirect(ROUTES.AFTER_LOGOUT);
+    if (redirectTo) {
+        redirect(redirectTo);
+    }
+
+    return {};
 }
