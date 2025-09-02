@@ -5,6 +5,7 @@ import { User, UserPlus } from 'lucide-react';
 import ContinueSignup from './ContinueSignup';
 import { cookies } from 'next/headers';
 import ContinueLogin from './ContinueLogin';
+import { getTranslations } from 'next-intl/server';
 
 export default async function Page({
     searchParams,
@@ -12,6 +13,7 @@ export default async function Page({
     searchParams: Promise<{ provider?: string; step?: string }>;
 }) {
     const [resolvedParams] = await Promise.all([searchParams]);
+    const t = await getTranslations('auth.continue');
 
     const step =
         resolvedParams?.step === 'login'
@@ -37,8 +39,8 @@ export default async function Page({
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-6">
                 <div className="text-center space-y-2">
-                    <h1 className="text-2xl tracking-tight">반갑습니다! 👋</h1>
-                    <p className="text-muted-foreground">계정 상태를 확인해주세요</p>
+                    <h1 className="text-2xl tracking-tight">{t('title')} 👋</h1>
+                    <p className="text-muted-foreground">{t('description')}</p>
                 </div>
 
                 <div className="space-y-3">
@@ -49,10 +51,10 @@ export default async function Page({
                                     <User className="h-5 w-5 text-primary" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg">이미 회원입니다</CardTitle>
-                                    <CardDescription>
-                                        이전에 이메일로 회원가입을 진행한 적이 있어요
-                                    </CardDescription>
+                                    <CardTitle className="text-lg">
+                                        {t('options.member.title')}
+                                    </CardTitle>
+                                    <CardDescription>{t('options.member.desc')}</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
@@ -66,7 +68,7 @@ export default async function Page({
                                     className="w-full"
                                     size="lg"
                                 >
-                                    기존 계정으로 연결하기
+                                    {t('options.member.button')}
                                 </Button>
                             </Link>
                         </CardContent>
@@ -79,10 +81,10 @@ export default async function Page({
                                     <UserPlus className="h-5 w-5 text-secondary-foreground" />
                                 </div>
                                 <div>
-                                    <CardTitle className="text-lg">처음 가입합니다</CardTitle>
-                                    <CardDescription>
-                                        이메일로 회원가입을 한 적이 없어요
-                                    </CardDescription>
+                                    <CardTitle className="text-lg">
+                                        {t('options.new.title')}
+                                    </CardTitle>
+                                    <CardDescription>{t('options.new.desc')}</CardDescription>
                                 </div>
                             </div>
                         </CardHeader>
@@ -96,7 +98,7 @@ export default async function Page({
                                     className="w-full"
                                     size="lg"
                                 >
-                                    새 계정 만들기
+                                    {t('options.new.button')}
                                 </Button>
                             </Link>
                         </CardContent>
@@ -105,7 +107,9 @@ export default async function Page({
 
                 <div className="text-center">
                     <p className="text-sm text-muted-foreground">
-                        잘 모르겠다면 <span className="text-primary">도움말</span>을 확인해보세요
+                        {t.rich('help.text', {
+                            em: chunks => <span className="text-primary">{chunks}</span>,
+                        })}
                     </p>
                 </div>
             </div>

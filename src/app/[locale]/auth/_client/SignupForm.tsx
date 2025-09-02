@@ -10,8 +10,12 @@ import { Mail, Phone, ShieldCheck, Key, MinusIcon } from 'lucide-react';
 
 import type { SignupInput as FormValues } from '@/lib/validation/signup';
 import { signupActionRHF } from '@/server/auth/signup';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '../../../../../config/routes';
 
 export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
+    const t = useTranslations('auth.signup');
+
     const {
         register,
         handleSubmit,
@@ -34,7 +38,7 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
     });
 
     const onSubmit = async (values: FormValues) => {
-        const res = await signupActionRHF(values);
+        const res = await signupActionRHF(values, ROUTES.AFTER_SIGNUP);
         if (res?.fieldErrors) {
             Object.entries(res.fieldErrors).forEach(([name, message]) => {
                 setError(name as keyof FormValues, { type: 'server', message });
@@ -55,18 +59,18 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     className="flex items-center gap-2"
                 >
                     <Mail className="h-4 w-4" />
-                    <span>이메일 주소 *</span>
+                    <span>{t('email_label')} *</span>
                 </Label>
                 <Input
                     id="email"
                     type="email"
-                    placeholder="example@email.com"
+                    placeholder={t('email_placeholder')}
                     aria-invalid={!!errors.email}
                     {...register('email', {
-                        required: '이메일을 입력해주세요.',
+                        required: t('email_required'),
                         pattern: {
                             value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                            message: '이메일 형식이 올바르지 않습니다.',
+                            message: t('email_pattern_error'),
                         },
                     })}
                 />
@@ -80,16 +84,16 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     className="flex items-center gap-2"
                 >
                     <Mail className="h-4 w-4" />
-                    <span>이름 *</span>
+                    <span>{t('name_label')} *</span>
                 </Label>
                 <Input
                     id="name"
                     type="text"
-                    placeholder="이름"
+                    placeholder={t('name_placeholder')}
                     aria-invalid={!!errors.name}
                     {...register('name', {
-                        required: '이름을 입력해주세요.',
-                        minLength: { value: 2, message: '이름은 2자 이상 입력해주세요.' },
+                        required: t('name_required'),
+                        minLength: { value: 2, message: t('name_pattern_error') },
                     })}
                 />
                 {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
@@ -102,16 +106,16 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     className="flex items-center gap-2"
                 >
                     <Key className="h-4 w-4" />
-                    <span>비밀번호 *</span>
+                    <span>{t('password_label')} *</span>
                 </Label>
                 <Input
                     id="password"
                     type="password"
-                    placeholder="비밀번호"
+                    placeholder={t('password_placeholder')}
                     aria-invalid={!!errors.password}
                     {...register('password', {
-                        required: '비밀번호를 입력해주세요.',
-                        minLength: { value: 8, message: '8자 이상 입력해주세요.' },
+                        required: t('password_required'),
+                        minLength: { value: 8, message: t('password_pattern_error') },
                     })}
                 />
                 {errors.password && (
@@ -126,17 +130,16 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     className="flex items-center gap-2"
                 >
                     <ShieldCheck className="h-4 w-4" />
-                    <span>비밀번호 확인 *</span>
+                    <span>{t('password_confirm_label')} *</span>
                 </Label>
                 <Input
                     id="passwordConfirm"
                     type="password"
-                    placeholder="비밀번호 확인"
+                    placeholder={t('password_confirm_placeholder')}
                     aria-invalid={!!errors.passwordConfirm}
                     {...register('passwordConfirm', {
-                        required: '비밀번호 확인을 입력해주세요.',
-                        validate: v =>
-                            v === getValues('password') || '비밀번호가 일치하지 않습니다.',
+                        required: t('password_confirm_required'),
+                        validate: v => v === getValues('password') || t('password_confirm_error'),
                     })}
                 />
                 {errors.passwordConfirm && (
@@ -150,15 +153,14 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     className="flex items-center gap-2"
                 >
                     <Phone className="h-4 w-4" />
-                    <span>전화번호 *</span>
+                    <span>{t('phone_label')} *</span>
                 </Label>
                 <Controller
                     control={control}
                     name="phone"
                     rules={{
-                        required: '전화번호를 입력해주세요.',
-                        validate: v =>
-                            /^\d{11}$/.test(v ?? '') || '전화번호 형식이 올바르지 않습니다.',
+                        required: t('phone_required'),
+                        validate: v => /^\d{11}$/.test(v ?? '') || t('phone_pattern_error'),
                     }}
                     render={({ field: { value, onChange } }) => (
                         <InputOTP
@@ -229,7 +231,7 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     <Controller
                         control={control}
                         name="agreeTerms"
-                        rules={{ validate: v => v || '약관 동의는 필수입니다.' }}
+                        rules={{ validate: v => v || t('agreeTerms_required') }}
                         render={({ field: { value, onChange } }) => (
                             <>
                                 <Checkbox
@@ -241,8 +243,8 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                                     htmlFor="agreeTerms"
                                     className="text-sm cursor-pointer"
                                 >
-                                    <span className="text-destructive">*</span> 서비스 이용약관에
-                                    동의합니다
+                                    <span className="text-destructive">*</span>{' '}
+                                    {t('agreeTerms_label')}
                                 </Label>
                             </>
                         )}
@@ -256,7 +258,7 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                     <Controller
                         control={control}
                         name="agreePrivacy"
-                        rules={{ validate: v => v || '개인정보 동의는 필수입니다.' }}
+                        rules={{ validate: v => v || t('agreePrivacy_required') }}
                         render={({ field: { value, onChange } }) => (
                             <>
                                 <Checkbox
@@ -268,8 +270,8 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                                     htmlFor="agreePrivacy"
                                     className="text-sm cursor-pointer"
                                 >
-                                    <span className="text-destructive">*</span> 개인정보 처리방침에
-                                    동의합니다
+                                    <span className="text-destructive">*</span>{' '}
+                                    {t('agreePrivacy_label')}
                                 </Label>
                             </>
                         )}
@@ -295,10 +297,10 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                                         htmlFor="agreeMarketing"
                                         className="text-sm cursor-pointer"
                                     >
-                                        마케팅 정보 수신에 동의합니다 (선택)
+                                        {t('agreeMarketing_required')}
                                     </Label>
                                     <p className="text-xs text-muted-foreground">
-                                        이벤트, 혜택 등의 알림을 받을 수 있습니다
+                                        {t('agreeMarketing_label')}
                                     </p>
                                 </div>
                             </>
@@ -313,7 +315,7 @@ export default function SignupForm({ snsEmail }: { snsEmail?: string }) {
                 size="lg"
                 disabled={isSubmitting}
             >
-                {isSubmitting ? '가입 중...' : '가입 완료하기'}
+                {isSubmitting ? t('signing') : t('signup')}
             </Button>
         </form>
     );

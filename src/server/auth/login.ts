@@ -5,12 +5,15 @@ import { redirect } from 'next/navigation';
 import { LoginInput, loginSchema } from '@/lib/validation/login';
 import { createSession } from '@/lib/auth';
 import { sanitizeRedirect } from '@/lib/safeRedirect';
+import { getTranslations } from 'next-intl/server';
 
 export async function loginActionRHF(
     raw: LoginInput,
     searchParams?: string,
     redirectTo?: string,
 ): Promise<{ fieldErrors?: Record<string, string> }> {
+    const tErr = await getTranslations('auth.login.errors');
+
     // 1) 검증
     const parsed = loginSchema.safeParse(raw);
     if (!parsed.success) {
@@ -34,13 +37,13 @@ export async function loginActionRHF(
         select: { id: true, name: true, passwordHash: true, email: true, image: true },
     });
     if (!user || !user.passwordHash) {
-        return { fieldErrors: { email: '가입된 이메일이 없습니다.' } };
+        return { fieldErrors: { email: tErr('email_not_found') } };
     }
 
     // 4) 비밀번호 확인
     const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
     if (!isPasswordCorrect) {
-        return { fieldErrors: { password: '비밀번호가 올바르지 않습니다.' } };
+        return { fieldErrors: { password: tErr('invalid_password') } };
     }
 
     const cookieStore = await cookies();
@@ -69,7 +72,7 @@ export async function loginActionRHF(
     if (searchParams) {
         const dest = sanitizeRedirect(searchParams);
         redirect(dest);
-    } else if ( redirectTo ) {
+    } else if (redirectTo) {
         const dest = sanitizeRedirect(redirectTo);
         redirect(dest);
     }

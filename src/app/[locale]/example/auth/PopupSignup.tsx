@@ -16,8 +16,10 @@ import { Controller, useForm } from 'react-hook-form';
 import type { SignupInput as FormValues } from '@/lib/validation/signup';
 import { signupActionRHF } from '@/server/auth/signup';
 import { Label } from '@/components/ui/label';
+import { useTranslations } from 'next-intl';
 
 export default function PopupSignup() {
+    const t = useTranslations('auth.signup');
     const [open, setOpen] = useState(false);
 
     const {
@@ -59,12 +61,12 @@ export default function PopupSignup() {
             onOpenChange={setOpen}
         >
             <DialogTrigger asChild>
-                <Button variant="outline">회원가입</Button>
+                <Button variant="outline">{t('signup')}</Button>
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[480px]">
                 <DialogHeader>
-                    <DialogTitle>회원가입</DialogTitle>
+                    <DialogTitle>{t('signup')}</DialogTitle>
                 </DialogHeader>
 
                 <form
@@ -72,17 +74,17 @@ export default function PopupSignup() {
                     className="grid gap-3"
                 >
                     <label className="grid gap-1">
-                        <span className="text-sm">이메일</span>
+                        <span className="text-sm">{t('email_label')}</span>
                         <Input
                             id="email"
                             type="email"
                             placeholder="you@example.com"
                             required
                             {...register('email', {
-                                required: '이메일을 입력해주세요.',
+                                required: t('email_required'),
                                 pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: '이메일 형식이 올바르지 않습니다.',
+                                    message: t('email_pattern_error'),
                                 },
                             })}
                         />
@@ -93,14 +95,14 @@ export default function PopupSignup() {
 
                     <div className="grid gap-3 md:grid-cols-2">
                         <label className="grid gap-1">
-                            <span className="text-sm">이름</span>
+                            <span className="text-sm">{t('name_label')}</span>
                             <Input
                                 id="name"
                                 type="text"
-                                placeholder="홍길동"
+                                placeholder={t('name_placeholder')}
                                 required
                                 {...register('name', {
-                                    required: '이름을 입력해주세요.',
+                                    required: t('name_required'),
                                 })}
                             />
                             {errors.name && (
@@ -108,17 +110,17 @@ export default function PopupSignup() {
                             )}
                         </label>
                         <label className="grid gap-1">
-                            <span className="text-sm">전화번호</span>
+                            <span className="text-sm">{t('phone_label')}</span>
                             <Input
                                 id="phone"
                                 type="tel"
                                 placeholder="010-1234-5678"
                                 required
                                 {...register('phone', {
-                                    required: '전화번호를 입력해주세요.',
+                                    required: t('phone_required'),
                                     pattern: {
                                         value: /^\d{11}$/,
-                                        message: '전화번호 형식이 올바르지 않습니다.',
+                                        message: t('phone_pattern_error'),
                                     },
                                 })}
                             />
@@ -130,13 +132,13 @@ export default function PopupSignup() {
 
                     <div className="grid gap-3 md:grid-cols-2">
                         <label className="grid gap-1">
-                            <span className="text-sm">비밀번호</span>
+                            <span className="text-sm">{t('password_label')}</span>
                             <Input
                                 id="password"
                                 type="password"
                                 required
                                 {...register('password', {
-                                    required: '비밀번호를 입력해주세요.',
+                                    required: t('password_required'),
                                 })}
                             />
                             {errors.password && (
@@ -146,16 +148,15 @@ export default function PopupSignup() {
                             )}
                         </label>
                         <label className="grid gap-1">
-                            <span className="text-sm">비밀번호 확인</span>
+                            <span className="text-sm">{t('password_confirm_label')}</span>
                             <Input
                                 id="passwordConfirm"
                                 type="password"
                                 required
                                 {...register('passwordConfirm', {
-                                    required: '비밀번호 확인을 입력해주세요.',
+                                    required: t('password_confirm_required'),
                                     validate: v =>
-                                        v === getValues('password') ||
-                                        '비밀번호가 일치하지 않습니다.',
+                                        v === getValues('password') || t('password_confirm_error'),
                                 })}
                             />
                             {errors.passwordConfirm && (
@@ -171,7 +172,7 @@ export default function PopupSignup() {
                             <Controller
                                 control={control}
                                 name="agreeTerms"
-                                rules={{ validate: v => v || '약관 동의는 필수입니다.' }}
+                                rules={{ validate: v => v || t('agreeTerms_required') }}
                                 render={({ field: { value, onChange } }) => (
                                     <>
                                         <Checkbox
@@ -183,8 +184,8 @@ export default function PopupSignup() {
                                             htmlFor="agreeTerms"
                                             className="text-sm cursor-pointer"
                                         >
-                                            <span className="text-destructive">*</span> 서비스
-                                            이용약관에 동의합니다
+                                            <span className="text-destructive">*</span>{' '}
+                                            {t('agreeTerms_label')}
                                         </Label>
                                     </>
                                 )}
@@ -194,7 +195,7 @@ export default function PopupSignup() {
                             <Controller
                                 control={control}
                                 name="agreePrivacy"
-                                rules={{ validate: v => v || '개인정보 동의는 필수입니다.' }}
+                                rules={{ validate: v => v || t('agreePrivacy_required') }}
                                 render={({ field: { value, onChange } }) => (
                                     <>
                                         <Checkbox
@@ -206,8 +207,8 @@ export default function PopupSignup() {
                                             htmlFor="agreePrivacy"
                                             className="text-sm cursor-pointer"
                                         >
-                                            <span className="text-destructive">*</span> 개인정보
-                                            처리방침에 동의합니다
+                                            <span className="text-destructive">*</span>{' '}
+                                            {t('agreePrivacy_label')}
                                         </Label>
                                     </>
                                 )}
@@ -229,10 +230,10 @@ export default function PopupSignup() {
                                                 htmlFor="agreeMarketing"
                                                 className="text-sm cursor-pointer"
                                             >
-                                                마케팅 정보 수신에 동의합니다 (선택)
+                                                {t('agreeMarketing_label')}
                                             </Label>
                                             <p className="text-xs text-muted-foreground">
-                                                이벤트, 혜택 등의 알림을 받을 수 있습니다
+                                                {t('agreeMarketing_required')}
                                             </p>
                                         </div>
                                     </>
@@ -245,7 +246,7 @@ export default function PopupSignup() {
                         type="submit"
                         className="mt-2"
                     >
-                        가입하기
+                        {t('signup')}
                     </Button>
                 </form>
             </DialogContent>

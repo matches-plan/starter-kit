@@ -19,7 +19,7 @@ type Props = React.ComponentProps<'div'> & {
 };
 
 export function LoginForm({ returnTo, className, step, ...props }: Props) {
-    const t = useTranslations('login');
+    const t = useTranslations('auth.login');
 
     const {
         register,
@@ -64,11 +64,10 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                         placeholder={t('email_placeholder')}
                                         required
                                         {...register('email', {
-                                            required: t('email_label') + '을(를) 입력해주세요.',
+                                            required: t('email_label_placeholder'),
                                             pattern: {
                                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message:
-                                                    t('email_label') + ' 형식이 올바르지 않습니다.',
+                                                message: t('email_pattern_error'),
                                             },
                                         })}
                                     />
@@ -91,8 +90,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                         placeholder={t('password_placeholder')}
                                         required
                                         {...register('password', {
-                                            required:
-                                                t('password_label') + '이(가) 올바르지 않습니다.',
+                                            required: t('password_pattern_error'),
                                         })}
                                     />
                                     {errors.password && (
@@ -108,7 +106,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                     className="w-full"
                                     disabled={isSubmitting}
                                 >
-                                    {t('login_button')}
+                                    {t('login')}
                                 </Button>
 
                                 {/* 이메일/비밀번호 찾기 */}
@@ -117,8 +115,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                         href={`?action=find-email`}
                                         className="text-muted-foreground hover:text-primary hover:underline"
                                     >
-                                        {/* ko.json에 별도 키 없어서 문구 하드코딩 or 추가 키 만들기 */}
-                                        이메일 찾기
+                                        {t('forgot_email_link')}
                                     </Link>
                                     <span className="text-muted-foreground">|</span>
                                     <Link
@@ -153,7 +150,7 @@ export function LoginForm({ returnTo, className, step, ...props }: Props) {
                                             className="w-full bg-[#FEE500] text-black hover:bg-[#F7DA00]"
                                         >
                                             {/* ko.json에 kakao 키가 없으니 기본 문구를 fallback으로 */}
-                                            {t('kakao_login', { default: '카카오로 로그인' })}
+                                            {t('kakao_login')}
                                         </KakaoLoginButton>
                                     </>
                                 )}

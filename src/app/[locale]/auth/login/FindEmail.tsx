@@ -10,14 +10,15 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Controller, useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
-import { CODE_MAP } from '@/components/api/auth';
 import { useRef } from 'react';
+import { useTranslations } from 'next-intl';
 
 type FindEmailInput = { name: string; phone: string };
 type VerifyInput = { code: string };
 
 export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) {
     const searchParam = useSearchParams();
+    const t = useTranslations('auth');
 
     const phase = (searchParam.get('phase') as 'form' | 'verify' | 'done') ?? 'form';
     const qName = searchParam.get('name') ?? '';
@@ -79,16 +80,16 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                 >
                                     <ArrowLeft className="h-4 w-4" />
                                 </Link>
-                                <CardTitle className="text-xl">이메일 찾기</CardTitle>
+                                <CardTitle className="text-xl">{t('findEmail.title')}</CardTitle>
                             </div>
                             <p className="text-sm text-muted-foreground">
-                                {phase === 'form' && '가입 시 입력하신 정보를 입력해주세요'}
-                                {phase === 'verify' && '전송된 6자리 인증번호를 입력해주세요'}
-                                {phase === 'done' && '확인이 완료되었습니다'}
+                                {phase === 'form' && t('findEmail.subtitle.form')}
+                                {phase === 'verify' && t('findEmail.subtitle.verify')}
+                                {phase === 'done' && t('findEmail.subtitle.done')}
                             </p>
                             {codeParam && (
                                 <p className="mt-2 text-sm text-destructive">
-                                    {CODE_MAP[codeParam] ?? codeParam}
+                                    {t(`common.errors.${codeParam}`)}
                                 </p>
                             )}
                         </CardHeader>
@@ -108,20 +109,20 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                         className="flex items-center gap-2"
                                     >
                                         <User className="h-4 w-4" />
-                                        이름
+                                        {t('findEmail.name_label')}
                                     </Label>
                                     <Input
                                         id="name"
                                         type="text"
-                                        placeholder="홍길동"
+                                        placeholder={t('findEmail.name_placeholder')}
                                         readOnly={lock}
                                         disabled={lock}
                                         defaultValue={qName}
-                                        {...register('name', { required: true, minLength: 2 })}
+                                        {...register('name', { required: true, minLength: 1 })}
                                     />
                                     {sendErrors.name && (
                                         <p className="text-xs text-destructive">
-                                            이름을 올바르게 입력해주세요.
+                                            {t('findEmail.name_pattern_error')}
                                         </p>
                                     )}
                                 </div>
@@ -132,7 +133,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                         className="flex items-center gap-2"
                                     >
                                         <Phone className="h-4 w-4" />
-                                        전화번호
+                                        {t('findEmail.phone_label')}
                                     </Label>
                                     <Controller
                                         control={control}
@@ -224,7 +225,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                     />
                                     {sendErrors.phone && (
                                         <p className="text-xs text-destructive">
-                                            전화번호 형식이 올바르지 않습니다.
+                                            {t('findEmail.phone_pattern_error')}
                                         </p>
                                     )}
                                 </div>
@@ -234,7 +235,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                     className="w-full"
                                     disabled={lock}
                                 >
-                                    인증번호 받기
+                                    {t('findEmail.send_code_button')}
                                 </Button>
                             </form>
 
@@ -259,7 +260,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                         value={qName}
                                     />
 
-                                    <Label htmlFor="code">인증번호 6자리</Label>
+                                    <Label htmlFor="code">{t('code_label')}</Label>
                                     <Input
                                         id="code"
                                         {...registerVerify('code', {
@@ -270,12 +271,12 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                         type="text"
                                         inputMode="numeric"
                                         maxLength={6}
-                                        placeholder="123456"
+                                        placeholder={t('findEmail.code_placeholder')}
                                         autoComplete="one-time-code"
                                     />
                                     {verifyErrors.code && (
                                         <p className="text-xs text-destructive">
-                                            6자리 숫자를 입력해주세요.
+                                            {t('findEmail.code_pattern_error')}
                                         </p>
                                     )}
 
@@ -284,7 +285,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                             className="flex-1"
                                             type="submit"
                                         >
-                                            인증하기
+                                            {t('findEmail.verify_button')}
                                         </Button>
                                     </div>
                                 </form>
@@ -301,7 +302,7 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                         </ul>
                                     ) : (
                                         <p className="text-sm text-muted-foreground">
-                                            해당 정보로 가입된 계정을 찾을 수 없습니다.
+                                            {t('findEmail.result.not_found')}
                                         </p>
                                     )}
 
@@ -310,7 +311,9 @@ export function FindEmail({ className, ...props }: React.ComponentProps<'div'>) 
                                             href="/auth/login"
                                             className="flex-1"
                                         >
-                                            <Button className="w-full">로그인하러 가기</Button>
+                                            <Button className="w-full">
+                                                {t('findEmail.go_to_login_button')}
+                                            </Button>
                                         </Link>
                                     </div>
                                 </div>

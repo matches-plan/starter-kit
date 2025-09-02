@@ -1,7 +1,7 @@
-import ImageCard from '@/app/example/object_storage/components/ImageCard';
-import Uploader from '@/app/example/object_storage/components/Uploader';
 import { downloadObject, getPresignedUrl, listObjects } from '@/lib/storage';
 import { revalidatePath } from 'next/cache';
+import ImageCard from './components/ImageCard';
+import Uploader from './components/Uploader';
 
 export default async function ObjectStoragePage() {
     let data = await listObjects({});
@@ -22,7 +22,7 @@ export default async function ObjectStoragePage() {
                     const url = await getPresignedUrl(item.Key!);
 
                     return (
-                        <ImageCard 
+                        <ImageCard
                             key={item.Key}
                             objectKey={item.Key!}
                             url={url}

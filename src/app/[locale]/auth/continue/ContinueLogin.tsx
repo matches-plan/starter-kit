@@ -1,8 +1,11 @@
 import { ArrowLeft, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { LoginForm } from '../_client/LoginForm';
+import { useTranslations } from 'next-intl';
 
 export default function LoginPage({ step }: { step: string }) {
+    const t = useTranslations('auth.continueLogin');
+
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-6">
@@ -13,17 +16,15 @@ export default function LoginPage({ step }: { step: string }) {
                         className="flex items-center p-0 h-auto hover:bg-transparent"
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
-                        이전으로
+                        {t('back')}
                     </Link>
 
                     <div className="text-center space-y-2">
                         <div className="flex items-center justify-center space-x-2 mb-2">
                             <LogIn className="h-6 w-6 text-primary" />
-                            <h1 className="text-2xl tracking-tight">계정 연결하기</h1>
+                            <h1 className="text-2xl tracking-tight">{t('title')}</h1>
                         </div>
-                        <p className="text-muted-foreground">
-                            기존 이메일 계정과 계정을 연결해주세요
-                        </p>
+                        <p className="text-muted-foreground">{t('description')}</p>
                     </div>
                 </div>
 
@@ -37,19 +38,21 @@ export default function LoginPage({ step }: { step: string }) {
                             <span className="w-full border-t" />
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-background px-2 text-muted-foreground">또는</span>
+                            <span className="bg-background px-2 text-muted-foreground">
+                                {t('or')}
+                            </span>
                         </div>
                     </div>
 
                     {/* 회원가입 링크 */}
                     <div className="text-center">
                         <p className="text-sm text-muted-foreground">
-                            아직 계정이 없으신가요?{' '}
+                            {t('no_account')}{' '}
                             <Link
                                 href="?step=signup"
                                 className="text-primary hover:underline"
                             >
-                                새 계정 만들기
+                                {t('signup_link')}
                             </Link>
                         </p>
                     </div>

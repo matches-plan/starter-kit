@@ -7,12 +7,11 @@ import PopupLogin from '../auth/popupLogin';
 import PopupSignup from '../auth/PopupSignup';
 import { Button } from '@/components/ui/button';
 import { signoutAction } from '@/server/auth/signout';
+import { useTranslations } from 'next-intl';
 
 export function TopNavbar() {
     const user = useAuth();
-
-    console.log(user);
-
+    const t = useTranslations('layout.navbar');
     return (
         <header className="w-full border-b bg-background">
             <div className="flex h-14 items-center justify-between px-6">
@@ -22,14 +21,14 @@ export function TopNavbar() {
                         <div className="h-8 w-8 bg-primary rounded-md flex items-center justify-center">
                             <span className="text-primary-foreground text-sm font-medium">L</span>
                         </div>
-                        <span className="hidden lg:block font-medium">Your App</span>
+                        <span className="hidden lg:block font-medium">{t('brand')}</span>
                     </div>
 
                     {user && (
                         <div className="relative max-w-sm flex-1">
                             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input
-                                placeholder="검색..."
+                                placeholder={t('search_placeholder')}
                                 className="pl-9 bg-muted/50"
                             />
                         </div>
@@ -52,7 +51,7 @@ export function TopNavbar() {
                             </div>
 
                             <div>{user.name}</div>
-                            <Button onClick={() => signoutAction()}>로그아웃</Button>
+                            <Button onClick={() => signoutAction()}>{t('logout')}</Button>
                         </div>
                     )}
                 </div>

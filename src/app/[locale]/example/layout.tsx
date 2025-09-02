@@ -1,7 +1,7 @@
-import ExampleSidebar from '@/app/example/components/ExampleSidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { TopNavbar } from './components/TopNavbar';
 import AuthProvider from '@/components/auth/AuthProvider';
+import ExampleSidebar from './components/ExampleSidebar';
 
 export default function ExampleLayout({
     children,

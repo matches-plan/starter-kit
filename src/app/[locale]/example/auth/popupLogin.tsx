@@ -14,8 +14,10 @@ import {
 import { useForm } from 'react-hook-form';
 import { LoginInput } from '@/lib/validation/login';
 import { loginActionRHF } from '@/server/auth/login';
+import { useTranslations } from 'next-intl';
 
 export default function PopupLogin() {
+    const t = useTranslations('auth.login');
     const [open, setOpen] = useState(false);
 
     const {
@@ -49,27 +51,27 @@ export default function PopupLogin() {
             onOpenChange={setOpen}
         >
             <DialogTrigger asChild>
-                <Button>로그인</Button>
+                <Button>{t('login')}</Button>
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>로그인</DialogTitle>
+                    <DialogTitle>{t('login')}</DialogTitle>
                 </DialogHeader>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className="grid gap-3"
                 >
                     <label>
-                        <span className="text-sm">이메일</span>
+                        <span className="text-sm">{t('email_label')}</span>
                         <Input
                             id="email"
                             type="email"
                             required
                             {...register('email', {
-                                required: '이메일을 입력해주세요.',
+                                required: t('email_label_placeholder'),
                                 pattern: {
                                     value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: '이메일 형식이 올바르지 않습니다.',
+                                    message: t('email_pattern_error'),
                                 },
                             })}
                         />
@@ -78,13 +80,13 @@ export default function PopupLogin() {
                         )}
                     </label>
                     <label>
-                        <span className="text-sm">비밀번호</span>
+                        <span className="text-sm">{t('password_label')}</span>
                         <Input
                             id="password"
                             type="password"
                             required
                             {...register('password', {
-                                required: '비밀번호가 올바르지 않습니다.',
+                                required: t('password_pattern_error'),
                             })}
                         />
                         {errors.password && (
@@ -93,7 +95,7 @@ export default function PopupLogin() {
                             </p>
                         )}
                     </label>
-                    <Button type="submit">로그인</Button>
+                    <Button type="submit">{t('login')}</Button>
                 </form>
             </DialogContent>
         </Dialog>

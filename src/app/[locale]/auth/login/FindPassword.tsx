@@ -11,6 +11,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 type FindPasswordInput = { email: string; name: string; phone: string };
 type VerifyInput = { code: string };
@@ -18,6 +19,7 @@ type ResetInput = { newPassword: string; confirmPassword: string };
 
 export function FindPassword({ className, ...props }: React.ComponentProps<'div'>) {
     const searchParam = useSearchParams();
+    const t = useTranslations('auth.findPassword');
     const phase = (searchParam.get('phase') as 'form' | 'verify' | 'reset') ?? 'form';
     const qEmail = searchParam.get('email') ?? '';
     const qName = searchParam.get('name') ?? '';
@@ -75,12 +77,12 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                 >
                                     <ArrowLeft className="h-4 w-4" />
                                 </Link>
-                                <CardTitle className="text-xl">비밀번호 찾기</CardTitle>
+                                <CardTitle className="text-xl">{t('title')}</CardTitle>
                             </div>
                             <p className="text-sm text-muted-foreground">
-                                {phase === 'form' && '가입 시 입력하신 정보를 입력해주세요'}
-                                {phase === 'verify' && '전송된 6자리 인증번호를 입력해주세요'}
-                                {phase === 'reset' && '새 비밀번호를 설정해주세요'}
+                                {phase === 'form' && t('subtitle.form')}
+                                {phase === 'verify' && t('subtitle.verify')}
+                                {phase === 'reset' && t('subtitle.reset')}
                             </p>
                             {codeParam && (
                                 <p className="mt-2 text-sm text-destructive">{codeParam}</p>
@@ -102,20 +104,20 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         className="flex items-center gap-2"
                                     >
                                         <Mail className="h-4 w-4" />
-                                        이메일
+                                        {t('email_label')}
                                     </Label>
                                     <Input
                                         id="email"
                                         type="email"
-                                        placeholder="example@email.com"
+                                        placeholder={t('email_placeholder')}
                                         required
                                         readOnly={lock}
                                         disabled={lock}
                                         {...register('email', {
-                                            required: '이메일을 입력해주세요.',
+                                            required: t('email_required'),
                                             pattern: {
                                                 value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                                message: '이메일 형식이 올바르지 않습니다.',
+                                                message: t('email_pattern_error'),
                                             },
                                         })}
                                     />
@@ -132,20 +134,20 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         className="flex items-center gap-2"
                                     >
                                         <User className="h-4 w-4" />
-                                        이름
+                                        {t('name_label')}
                                     </Label>
                                     <Input
                                         id="name"
                                         type="text"
-                                        placeholder="홍길동"
+                                        placeholder={t('name_placeholder')}
                                         required
                                         readOnly={lock}
                                         disabled={lock}
                                         {...register('name', {
-                                            required: '이름을 입력해주세요.',
+                                            required: t('name_required'),
                                             minLength: {
                                                 value: 2,
-                                                message: '이름은 2자 이상 입력해주세요.',
+                                                message: t('name_pattern_error'),
                                             },
                                         })}
                                     />
@@ -162,16 +164,16 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         className="flex items-center gap-2"
                                     >
                                         <Phone className="h-4 w-4" />
-                                        전화번호
+                                        {t('phone_label')}
                                     </Label>
                                     <Controller
                                         control={control}
                                         name="phone"
                                         rules={{
-                                            required: '전화번호를 입력해주세요.',
+                                            required: t('phone_placeholder'),
                                             validate: v =>
                                                 /^\d{10,11}$/.test((v ?? '').replace(/\D/g, '')) ||
-                                                '전화번호 형식이 올바르지 않습니다.',
+                                                t('phone_pattern_error'),
                                         }}
                                         render={({ field: { value, onChange } }) => (
                                             <>
@@ -265,7 +267,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                     className="w-full"
                                     disabled={lock}
                                 >
-                                    인증번호 받기
+                                    {t('send_code_button')}
                                 </Button>
                             </form>
 
@@ -295,7 +297,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         value={qName}
                                     />
 
-                                    <Label htmlFor="otpCode">인증번호 6자리</Label>
+                                    <Label htmlFor="otpCode">{t('code_label')}</Label>
                                     <Input
                                         id="otpCode"
                                         {...registerVerify('code', {
@@ -306,12 +308,12 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         type="text"
                                         inputMode="numeric"
                                         maxLength={6}
-                                        placeholder="123456"
+                                        placeholder={t('code_placeholder')}
                                         autoComplete="one-time-code"
                                     />
                                     {verifyErrors.code && (
                                         <p className="text-xs text-destructive">
-                                            6자리 숫자를 입력해주세요.
+                                            {t('code_pattern_error')}
                                         </p>
                                     )}
 
@@ -319,7 +321,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         className="w-full"
                                         type="submit"
                                     >
-                                        인증하기
+                                        {t('verify_button')}
                                     </Button>
                                 </form>
                             )}
@@ -338,7 +340,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                             htmlFor="newPassword"
                                             className="flex items-center gap-2"
                                         >
-                                            <Lock className="h-4 w-4" />새 비밀번호
+                                            <Lock className="h-4 w-4" />{t('new_password_label')}
                                         </Label>
                                         <Input
                                             id="newPassword"
@@ -353,7 +355,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         />
                                         {resetErrors.newPassword && (
                                             <p className="text-xs text-destructive">
-                                                8자 이상 입력해주세요.
+                                                {t('new_password_pattern_error')}
                                             </p>
                                         )}
                                     </div>
@@ -362,7 +364,7 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                             htmlFor="confirmPassword"
                                             className="flex items-center gap-2"
                                         >
-                                            <Lock className="h-4 w-4" />새 비밀번호 확인
+                                            <Lock className="h-4 w-4" />{t('new_password_confirm_label')}
                                         </Label>
                                         <Input
                                             id="confirmPassword"
@@ -380,19 +382,19 @@ export function FindPassword({ className, ...props }: React.ComponentProps<'div'
                                         className="w-full"
                                         type="submit"
                                     >
-                                        비밀번호 변경
+                                        {t('password_change')}
                                     </Button>
                                 </form>
                             )}
 
                             <div className="text-center mt-6">
                                 <p className="text-sm text-muted-foreground">
-                                    계정이 기억나셨나요?{' '}
+                                    {t('remember_account')}{' '}
                                     <Link
                                         href="/auth/login"
                                         className="text-primary hover:underline"
                                     >
-                                        로그인하기
+                                        {t('login_button')}
                                     </Link>
                                 </p>
                             </div>

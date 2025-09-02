@@ -1,18 +1,184 @@
 {
-    "login": {
-        "title": "Welcome",
-        "description": "Login with your email",
-        "email_label": "Email",
-        "email_placeholder": "m@example.com",
-        "password_label": "Password",
-        "password_placeholder": "Enter your password",
-        "forgot_password_link": "Forgot your password?",
-        "kakao_login": "Login with Kakao",
-        "login_button": "Login",
-        "social_login": "Social Login",
-        "apple_login": "Login with Apple",
-        "google_login": "Login with Google",
-        "no_account": "Don't have an account yet?",
-        "sign_up_link": "Sign Up"
+    "auth": {
+        "login": {
+            "title": "Welcome",
+            "description": "Login with your email",
+            "email_label": "Email",
+            "email_label_placeholder": "Please enter your email.",
+            "email_pattern_error": "The email format is invalid.",
+            "email_placeholder": "m@example.com",
+            "forgot_email_link": "Forgot your email?",
+            "password_label": "Password",
+            "password_pattern_error": "The password is invalid.",
+            "password_placeholder": "Enter your password",
+            "forgot_password_link": "Forgot your password?",
+            "login": "Login",
+            "social_login": "Social Login",
+            "kakao_login": "Login with Kakao",
+            "apple_login": "Login with Apple",
+            "google_login": "Login with Google",
+            "no_account": "Don't have an account yet?",
+            "sign_up_link": "Sign Up",
+            "errors": {
+                "email_not_found": "No account found for this email.",
+                "invalid_password": "Incorrect password."
+            }
+        },
+        "findEmail": {
+            "title": "Find Email",
+            "subtitle": {
+                "form": "Enter the information you used when signing up.",
+                "verify": "Enter the 6-digit verification code we sent.",
+                "done": "Verification completed."
+            },
+            "name_label": "Name",
+            "name_placeholder": "Enter your name",
+            "name_pattern_error": "Please enter a valid name.",
+            "phone_label": "Phone Number",
+            "phone_pattern_error": "Invalid phone number format.",
+            "send_code_button": "Send verification code",
+            "code_label": "6-digit verification code",
+            "code_placeholder": "123456",
+            "code_pattern_error": "Please enter a 6-digit number.",
+            "verify_button": "Verify",
+            "resend_code": "Resend code",
+            "result": {
+                "not_found": "No account found with the provided information.",
+                "list_label": "Registered email"
+            },
+            "go_to_login_button": "Go to Login",
+            "back_to_login_link": "Back to Login"
+        },
+        "findPassword": {
+            "title": "Find Password",
+            "subtitle": {
+                "form": "Enter the information you used when signing up.",
+                "verify": "Enter the 6-digit verification code we sent.",
+                "reset": "Enter a new password."
+            },
+            "email_label": "Email",
+            "email_placeholder": "example@email.com",
+            "email_required": "Please enter your email.",
+            "email_pattern_error": "The email format is invalid.",
+            "name_label": "Name",
+            "name_placeholder": "John Doe",
+            "name_required": "Please enter your name.",
+            "name_pattern_error": "Name must be at least 2 characters.",
+            "phone_label": "Phone Number",
+            "phone_placeholder": "Enter your phone number.",
+            "phone_pattern_error": "Invalid phone number format.",
+            "send_code_button": "Send verification code",
+            "code_label": "6-digit verification code",
+            "code_placeholder": "123456",
+            "code_pattern_error": "Please enter a 6-digit number.",
+            "verify_button": "Verify",
+            "new_password_label": "New Password",
+            "new_password_pattern_error": "Password must be at least 8 characters.",
+            "new_password_confirm_label": "Confirm New Password",
+            "password_change": "Change Password",
+            "remember_account": "Remembered your account?",
+            "login_button": "Login"
+        },
+        "signup": {
+            "email_label": "Email Address",
+            "email_placeholder": "example@email.com",
+            "email_required": "Please enter your email.",
+            "email_pattern_error": "The email format is invalid.",
+            "name_label": "Name",
+            "name_placeholder": "Hong Gil-dong",
+            "name_required": "Please enter your name.",
+            "name_pattern_error": "Name must be at least 2 characters.",
+            "password_label": "Password",
+            "password_placeholder": "Enter your password",
+            "password_required": "Please enter your password.",
+            "password_pattern_error": "Password must be at least 8 characters.",
+            "password_confirm_label": "Confirm Password",
+            "password_confirm_placeholder": "Re-enter your password",
+            "password_confirm_required": "Please confirm your password.",
+            "password_confirm_error": "Passwords do not match.",
+            "phone_label": "Phone Number",
+            "phone_required": "Please enter your phone number.",
+            "phone_pattern_error": "Invalid phone number format.",
+            "agreeTerms_required": "Agreement to the Terms is required.",
+            "agreeTerms_label": "I agree to the Terms of Service.",
+            "agreePrivacy_required": "Agreement to the Privacy Policy is required.",
+            "agreePrivacy_label": "I agree to the Privacy Policy.",
+            "agreeMarketing_required": "I agree to receive marketing information (optional).",
+            "agreeMarketing_label": "I would like to receive notifications about events and offers.",
+            "signing": "Signing up...",
+            "signup": "Sign Up",
+            "errors": {
+                "email_exists": "This email is already registered. Please choose \"Connect to existing account\".",
+                "phone_exists": "This phone number is already registered. Please choose \"Connect to existing account\"."
+            }
+        },
+        "continue": {
+            "title": "Welcome!",
+            "description": "Please check your account status",
+            "options": {
+                "member": {
+                    "title": "I already have an account",
+                    "desc": "I previously signed up with my email",
+                    "button": "Connect to existing account"
+                },
+                "new": {
+                    "title": "I'm new here",
+                    "desc": "I haven't signed up with email before",
+                    "button": "Create a new account"
+                }
+            },
+            "help": {
+                "text": "If you're not sure, check the <em>Help</em>.",
+                "link_label": "Help"
+            }
+        },
+        "continueLogin": {
+            "back": "Back",
+            "title": "Connect Your Account",
+            "description": "Connect with your existing email account.",
+            "or": "or",
+            "no_account": "Don't have an account yet?",
+            "signup_link": "Create a new account"
+        },
+        "continueSignup": {
+            "back": "Back",
+            "title": "Complete Sign Up",
+            "description": "Please provide additional information to use the service.",
+            "card_title": "Additional Information",
+            "card_desc": "Enter your email and phone number to complete your account.",
+            "already": {
+                "rich": "Already have an account? <link>Choose again</link>"
+            }
+        },
+        "common": {
+            "errors": {
+                "VALIDATION_ERROR": "Please check your input.",
+                "SEND_FAILED": "Failed to send the verification code.",
+                "VERIFY_FAILED": "Failed to verify the code.",
+                "INVALID": "The verification code is invalid.",
+                "EXPIRED": "The verification code has expired.",
+                "TOO_MANY_TRIES": "You have exceeded the number of attempts.",
+                "NOT_FOUND": "Verification session not found.",
+                "USER_NOT_FOUND": "No matching information found.",
+                "TOKEN_INVALID": "The token is invalid.",
+                "UNKNOWN": "An unknown error occurred."
+            }
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "logout": "Sign out",
+        "login_required": "Login is required.",
+        "greeting": "Hello, {name}!"
+    },
+    "layout": {
+        "navbar": {
+            "brand": "Your App",
+            "search_placeholder": "Search...",
+            "logout": "Sign out",
+            "hello_name": "Hello, {name}!",
+            "login": "Log in",
+            "signup": "Sign up"
+        }
     }
 }
